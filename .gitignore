@@ -1,0 +1,28 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Directorios de construcción
+build/
+dist/
+
+# Archivos de configuración del IDE
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos sensibles
+.env
+secrets.yml
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos generados por el sistema
+*.class
+*.pyc
+__pycache__/
