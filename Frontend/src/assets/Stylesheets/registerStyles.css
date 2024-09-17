@@ -1,0 +1,32 @@
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+ 
+.input-field {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+  
+button[type="submit"] {
+    padding: 10px;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+  
+.text-muted {
+    text-align: center;
+    margin-top: 10px;
+    color: #6c757d;
+}
