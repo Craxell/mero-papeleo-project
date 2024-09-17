@@ -15,7 +15,3 @@ def read_root():
     return {"Hello": "World"}
 
 # Configura otros aspectos de la aplicación aquí, como middleware, eventos, etc.
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host=settings.APP_HOST, port=settings.APP_PORT, reload=True)
