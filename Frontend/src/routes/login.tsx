@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../assets/Stylesheets/loginStyles.css';
+import { baseUrl } from '../helpers/urlHelpers';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/login', {
+      const response = await axios.post(`${baseUrl}/login`, {
         username: username,
         password: password,
       });

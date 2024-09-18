@@ -1,11 +1,16 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from app.config import settings
+import uvicorn
 
 # Importa tus routers o endpoints aquí
 from application.registration_use_case import registration_use_case
 from application.login_use_case import login_use_case
-
 
 app = FastAPI()
 
@@ -23,8 +28,7 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World"}
 
-# Configura otros aspectos de la aplicación aquí, como middleware, eventos, etc.
-
+# Definición de rutas adicionales
 class UserRegistration(BaseModel):
     username: str
     email: str
@@ -38,12 +42,9 @@ def register_user(user: UserRegistration):
     else:
         raise HTTPException(status_code=400, detail=result["message"])
 
-
-
 class LoginRequest(BaseModel):
     username: str
     password: str
-
 
 @app.post("/login")
 def login(request: LoginRequest):
@@ -52,3 +53,7 @@ def login(request: LoginRequest):
         return {"status": "success", "message": "Login exitoso"}
     else:
         raise HTTPException(status_code=400, detail="Credenciales incorrectas")
+
+# Ejecutar uvicorn cuando se ejecuta el archivo directamente
+if __name__ == "__main__":
+    uvicorn.run("main:app", host=settings.APP_HOST, port=settings.APP_PORT, reload=True)

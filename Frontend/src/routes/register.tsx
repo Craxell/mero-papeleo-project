@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { baseUrl } from '../helpers/urlHelpers';
+
 import '../assets/Stylesheets/registerStyles.css';  // Importa el nuevo CSS
 
 export default function Register() {
@@ -14,13 +16,18 @@ export default function Register() {
   // Función que se ejecuta al enviar el formulario
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log('Form submitted'); // Verifica que se ejecute el submit
 
     try {
-      const response = await axios.post('http://localhost:8000/register', {
+      console.log('Base URL:', baseUrl); // Verifica la URL base
+
+      const response = await axios.post(`${baseUrl}/register`, {
         username: username,
         email: email,
         password: password,
       });
+
+      console.log('Response:', response); // Verifica la respuesta
 
       // Si el servidor devuelve éxito
       if (response.data.status === 'success') {
@@ -46,6 +53,7 @@ export default function Register() {
       }
     } catch (error) {
       // Error en la solicitud
+      console.error('Error:', error); // Verifica el error
       Swal.fire({
         title: 'Error',
         text: 'Hubo un problema con el servidor. Inténtalo nuevamente.',
