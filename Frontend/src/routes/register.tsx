@@ -4,32 +4,41 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { baseUrl } from '../helpers/urlHelpers';
+import DefaultLayout from '../layout/DefaultLayout';
+import { useAuth } from '../auth/AuthProvider';
+import { Navigate } from 'react-router-dom';
 
-import '../assets/Stylesheets/registerStyles.css';  // Importa el nuevo CSS
+import '../assets/Stylesheets/registerStyles.css';
 
 export default function Register() {
-  // Variables de estado para username, correo y contraseña
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Función que se ejecuta al enviar el formulario
+  const auth = useAuth();
+
+  // Si el usuario ya está autenticado, redirige al dashboard
+  if (auth.isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('Form submitted'); // Verifica que se ejecute el submit
-
     try {
-      console.log('Base URL:', baseUrl); // Verifica la URL base
+      console.log('Base URL:', baseUrl);
+      console.log('Datos enviados:', { username, email, password });
 
       const response = await axios.post(`${baseUrl}/register`, {
-        username: username,
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
       });
 
-      console.log('Response:', response); // Verifica la respuesta
-
-      // Si el servidor devuelve éxito
+      console.log('Response:', response);
       if (response.data.status === 'success') {
         Swal.fire({
           title: 'Registro exitoso',
@@ -38,33 +47,43 @@ export default function Register() {
           confirmButtonText: 'OK',
         });
 
-        // Limpiar los campos después del registro
+        // Llamar a la función de login tras el registro exitoso
+        await auth.login(username, password);
+
+        // Limpiar los campos de entrada
         setUsername('');
         setEmail('');
         setPassword('');
       } else {
-        // Si el servidor devuelve un error
         Swal.fire({
           title: 'Error',
-          text: response.data.message,
+          text: response.data.detail || 'Ocurrió un error durante el registro.',
           icon: 'error',
           confirmButtonText: 'OK',
         });
       }
     } catch (error) {
-      // Error en la solicitud
-      console.error('Error:', error); // Verifica el error
-      Swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema con el servidor. Inténtalo nuevamente.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
+      console.error('Error en la solicitud:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        Swal.fire({
+          title: 'Error',
+          text: error.response.data.detail || 'Ocurrió un error durante el registro.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Ocurrió un error durante el registro. Por favor, inténtalo de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
     }
   };
 
   return (
-    <>
+    <DefaultLayout>
       <h1 className="title">Registrarse</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-2">
@@ -96,7 +115,6 @@ export default function Register() {
             required
           />
         </Form.Group>
-
         <Button variant="primary" type="submit">
           Registrarse
         </Button>
@@ -105,6 +123,6 @@ export default function Register() {
           No compartimos tus datos con nadie ;v
         </Form.Text>
       </Form>
-    </>
+    </DefaultLayout>
   );
 }

@@ -1,10 +1,10 @@
 import DefaultLayout from "../layout/DefaultLayout";
 
-export default function Dashboard(){
+export default function LandingPage(){
     return(
         <DefaultLayout>
             <>
-                <h1>Bienvenido al dashboard</h1>
+                <h1>Bienvenido al landingPage</h1>
             </>
         </DefaultLayout>
     )

@@ -25,7 +25,7 @@ Configura el entorno de desarrollo:
 Instala Conda (si aún no está instalado). Puedes descargarlo desde aquí.
 Crea y activa el entorno Conda para el backend:
 
-conda create -n mero-papeleo-backend python=3.10
+conda create -n mero-papeleo-backend python
 conda activate mero-papeleo-backend
 
 conda install poetry

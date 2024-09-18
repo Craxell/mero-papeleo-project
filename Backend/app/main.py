@@ -2,58 +2,57 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
-import uvicorn
 
-# Importa tus routers o endpoints aquí
-from application.registration_use_case import registration_use_case
-from application.login_use_case import login_use_case
+from domain.models import UserCreate
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from application.registration_use_case import RegistrationUseCase
+from application.login_use_case import LoginUseCase
+from application.user_crud_use_case import UserCrudUseCase
+from domain.repositories.mongo_repository import MongoRepository
+
+
+import uvicorn
+from config import settings
 
 app = FastAPI()
 
-# Configuración de CORS
+# Configuración CORS
+origins = [
+    settings.APP_HOST,
+    settings.REACT_VITE_CONNECTION,
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # O especifica los orígenes permitidos
+    #allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # O especifica los métodos permitidos, como ["GET", "POST"]
-    allow_headers=["*"],  # O especifica los encabezados permitidos
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Ejemplo de una ruta simple
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# Crear instancia del repositorio
+repo = MongoRepository()
 
-# Definición de rutas adicionales
-class UserRegistration(BaseModel):
-    username: str
-    email: str
-    password: str
-
+# Rutas para registro, login y CRUD de usuarios
 @app.post("/register")
-def register_user(user: UserRegistration):
-    result = registration_use_case.execute(user.username, user.email, user.password)
-    if result["status"] == "success":
-        return {"status": "success", "message": "Registration successful"}
-    else:
-        raise HTTPException(status_code=400, detail=result["message"])
+async def register(user_data: UserCreate, use_case: RegistrationUseCase = Depends(lambda: RegistrationUseCase(repo))):
+    try:
+        return use_case.register(user_data)
+    except ValueError as e:
+        return {"error": str(e)}
 
-class LoginRequest(BaseModel):
-    username: str
-    password: str
 
 @app.post("/login")
-def login(request: LoginRequest):
-    result = login_use_case.execute(request.username, request.password)
-    if result['status'] == 'success':
-        return {"status": "success", "message": "Login exitoso"}
-    else:
-        raise HTTPException(status_code=400, detail="Credenciales incorrectas")
+async def login(credentials: dict, use_case: LoginUseCase = Depends(lambda: LoginUseCase(repo))):
+    return use_case.login(credentials["username"], credentials["password"])
 
-# Ejecutar uvicorn cuando se ejecuta el archivo directamente
+@app.get("/users")
+async def list_users(use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):
+    return use_case.get_all_users()
+
+# Si el archivo es ejecutado directamente, iniciar Uvicorn
 if __name__ == "__main__":
-    uvicorn.run("main:app", host=settings.APP_HOST, port=settings.APP_PORT, reload=True)
+    uvicorn.run("app.main:app", host=settings.APP_HOST, port=settings.APP_PORT, reload=True)

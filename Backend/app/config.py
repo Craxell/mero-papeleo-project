@@ -5,7 +5,14 @@ class Settings(BaseSettings):
     # Configuración de la aplicación
     APP_HOST: str
     APP_PORT: int
+
+    # Config react_vite
+    REACT_VITE_CONNECTION: str
     
+    #Hashing
+    SECRET_KEY: str
+    ALGORITHM: str
+
     # Configuración para MongoDB
     MONGO_URI: str
     MONGO_DB_NAME: str
