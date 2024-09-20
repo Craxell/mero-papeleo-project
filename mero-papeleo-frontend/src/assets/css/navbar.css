@@ -1,0 +1,28 @@
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: visible; /* Asegura que el contenido adicional sea visible */
+}
+
+.nav-item {
+    transition: transform 0.3s ease; /* Cambié de box-shadow a transform */
+    padding: 5px 10px; /* Reduce el espaciado alrededor del texto */
+    display: inline-block; /* Permite que el texto se ajuste mejor */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    margin: 0; /* Asegúrate de que no haya margen adicional */
+}
+
+.nav-item:hover {
+    transform: scale(1.1); /* Efecto de zoom */
+    z-index: 1; /* Asegúrate de que el elemento hover esté encima */
+}
+
+.nav-item.active .nav-link {
+    color: rgb(14, 120, 219); /* Cambia el color del texto */
+}
+
+/* Media query para ajustar el zoom en pantallas más pequeñas */
+@media (max-width: 768px) {
+    .nav-item:hover {
+        transform: scale(1.05); /* Reduce el efecto de zoom en pantallas pequeñas */
+    }
+}
