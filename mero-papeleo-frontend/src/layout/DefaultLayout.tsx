@@ -1,8 +1,15 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import Navbar from "../components/navBar"; // Asegúrate de importar el Navbar
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../auth/authContext";
+import Navbar from "../components/navBar";
 
 const DefaultLayout: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <>
       <Navbar /> {/* Aquí se incluye el Navbar */}

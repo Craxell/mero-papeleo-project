@@ -1,15 +1,37 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+import { useAuth } from '../auth/authContext'; 
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { register } = useAuth();
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí va la lógica de registro
-    console.log('Registro:', { username, email, password });
+    try {
+      const response = await register(username, email, password);
+      Swal.fire({
+        title: 'Registro exitoso',
+        text: response.message, // Muestra el mensaje del servidor
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+      // Limpia los campos después de un registro exitoso
+      setUsername('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Ocurrió un error. Por favor, inténtalo de nuevo.';
+      Swal.fire({
+        title: 'Error',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
   };
 
   return (

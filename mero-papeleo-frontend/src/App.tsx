@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import DefaultLayout from './layout/DefaultLayout';
 import LandingPage from './pages/LandingPage/LandingPage';
 
-
 import Dashboard from './pages/Dashboard/dashboard';
 import Usuarios from './pages/Users/users';
 import Prompt from './pages/Prompt/prompt';
