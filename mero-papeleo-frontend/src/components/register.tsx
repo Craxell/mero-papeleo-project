@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { useAuth } from '../auth/authContext'; 
+import { useAuth } from '../auth/AuthContext'; 
 
 const Register = () => {
   const [username, setUsername] = useState('');

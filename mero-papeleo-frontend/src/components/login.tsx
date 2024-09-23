@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Swal from 'sweetalert2';
-import { useAuth } from '../auth/authContext'; 
+import { useAuth } from '../auth/AuthContext'; 
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
