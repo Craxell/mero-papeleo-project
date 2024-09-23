@@ -1,4 +1,4 @@
-# Mero Papeleo
+# Mero Papeleo RAG Project
 
 ## Descripción
 
@@ -15,8 +15,8 @@ Mero Papeleo es un proyecto en desarrollo que tiene como objetivo proporcionar u
 Para instalar y ejecutar el proyecto localmente, sigue estos pasos:
 
 1. **Clona el repositorio**:
-   ```bash
-   git clone https://github.com/Craxell/mero-papeleo-project.git
+   
+   `git clone https://github.com/Craxell/mero-papeleo-project.git`
 
 Configura el entorno de desarrollo:
 
@@ -25,21 +25,19 @@ Configura el entorno de desarrollo:
 Instala Conda (si aún no está instalado). Puedes descargarlo desde aquí.
 Crea y activa el entorno Conda para el backend:
 
-conda create -n mero-papeleo-backend python
-conda activate mero-papeleo-backend
+1. `conda create -n meroPapeleo python` <br>
+2. `conda activate meroPapeleo` <br>
+3. `pip install poetry` <br>
+   
+### Inicialización del proyecto <br>
+1. `poetry install` <br>
+2. `cd mero-papeleo-frontend && npm i`<br>
+   
+### Ejecución del proyecto
+1. `cd .. && cd Backend/app && python .\main.py`
+2. `cd ../../mero-papeleo-frontend && npm run dev`
 
-conda install poetry
-
-cd backend
-poetry install
-cd ../frontend
-npm install
-cd ../backend
-poetry run uvicorn app.main:app --reload
-cd ../frontend
-npm run dev
-
-**README.md**
+## **README.md**<br>
 Este archivo `README.md` proporciona una guía completa y detallada para clonar el repositorio, configurar el entorno de desarrollo, instalar las dependencias, y ejecutar tanto el frontend como el backend del proyecto. Guárdalo en la raíz de tu repositorio para que los colaboradores y usuarios puedan seguir estos pasos fácilmente.
 
 
@@ -55,10 +53,10 @@ Este archivo `README.md` proporciona una guía completa y detallada para clonar 
 
 Dependencias por instalar (TO DO):
 
-fastapi[all]: Incluye FastAPI y sus dependencias recomendadas.
-pymongo: Cliente para interactuar con MongoDB.
-python-jose: Para manejar JSON Web Tokens (JWT).
-passlib: Para hashing de contraseñas.
+**fastapi[all]**: Incluye FastAPI y sus dependencias recomendadas.<br>
+**pymongo**: Cliente para interactuar con MongoDB.<br>
+**python-jose**: Para manejar JSON Web Tokens (JWT).<br>
+**passlib**: Para hashing de contraseñas.<br>
 
 ## Errores conocidos:
 
