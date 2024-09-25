@@ -2,11 +2,22 @@ import { useContext, createContext, useState, useEffect } from "react";
 import axios from 'axios';
 import { baseUrl } from '../helpers/url';
 
+interface LoginResponse {
+    token: string;
+    username: string;
+    message: string;
+}
+
+interface RegisterResponse {
+    success: boolean;
+    message: string;
+}
+
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (username: string, password: string) => Promise<any>;
+    login: (username: string, password: string) => Promise<LoginResponse>;
     logout: () => void;
-    register: (username: string, email: string, password: string) => Promise<any>;
+    register: (username: string, email: string, password: string) => Promise<RegisterResponse>;
     token: string | null;
     username: string | null; 
 }
@@ -17,9 +28,9 @@ interface AuthProviderProps {
 
 const AuthContext = createContext<AuthContextType>({
     isAuthenticated: false,
-    login: async () => Promise.resolve(),
+    login: async () => Promise.resolve({ token: '', username: '', message: '' }),
     logout: () => {},
-    register: async () => Promise.resolve(),
+    register: async () => Promise.resolve({ success: false, message: '' }),
     token: null,
     username: null,
 });
@@ -44,11 +55,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const response = await axios.post(`${baseUrl}/login`, { username, password });
             if (response.data.status === 'success') {
                 const newToken = response.data.access_token;
-                const userName = response.data.username;
                 setToken(newToken);
-                setUsername(userName);
+                setUsername(username);
                 localStorage.setItem('token', newToken);
-                localStorage.setItem('username', userName);
+                localStorage.setItem('username', username);
                 setIsAuthenticated(true);
                 return response.data; 
             } else {
