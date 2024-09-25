@@ -76,9 +76,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             const response = await axios.post(`${baseUrl}/register`, { username, email, password });
             if (response.data.status === 'success') {
-                return response.data;
-            } else if (response.data.detail) {
-                throw new Error(response.data.detail);
+                return response.data.message;
+            } else if (response.data.message) {
+                throw new Error(response.data.message);
             } else {
                 throw new Error('Error inesperado al registrar.');
             }
