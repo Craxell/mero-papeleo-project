@@ -52,11 +52,16 @@ class LoginUseCase:
         # Autenticación de usuario
         user = self.authenticate_user(username, password)
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Credenciales inválidas",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            # raise HTTPException(
+            #     status_code=status.HTTP_401_UNAUTHORIZED,
+            #     message="Credenciales inválidas",
+            #     headers={"WWW-Authenticate": "Bearer"},
+            # )
+            return{
+                "status": "error",
+                "message": "Credenciales inválidas",
+                "headers": {"WWW-Authenticate": "Bearer"}
+            }
         
         access_token = self.create_access_token(data={"sub": user["username"], "username": user["username"]})
         logger.info(f"Inicio de sesión exitoso para el usuario: {username}")
