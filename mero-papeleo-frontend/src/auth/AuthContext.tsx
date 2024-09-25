@@ -44,10 +44,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const response = await axios.post(`${baseUrl}/login`, { username, password });
             if (response.data.status === 'success') {
                 const newToken = response.data.access_token;
+                const userName = response.data.username;
                 setToken(newToken);
-                setUsername(username);
+                setUsername(userName);
                 localStorage.setItem('token', newToken);
-                localStorage.setItem('username', username);
+                localStorage.setItem('username', userName);
                 setIsAuthenticated(true);
                 return response.data; 
             } else {

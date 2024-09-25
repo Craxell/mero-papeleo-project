@@ -67,6 +67,7 @@ class LoginUseCase:
         logger.info(f"Inicio de sesión exitoso para el usuario: {username}")
         return {
             "status": "success",
+            "username": username,
             "message": f"Bienvenido {username}",
             "access_token": access_token,
             "token_type": "bearer"
