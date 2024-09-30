@@ -7,8 +7,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class RegistrationUseCase:
     def __init__(self, repo: MongoRepository):
         self.repo = repo
-    
-    def register(self, user_data: UserCreate): 
+
+    def register(self, user_data: UserCreate):
         existing_user_email = self.repo.find_one("users", {"email": user_data.email})
         if existing_user_email:
             return {
@@ -21,15 +21,24 @@ class RegistrationUseCase:
             return {
                 "status": "error",
                 "message": "Username no disponible."
-            } 
+            }
 
         hashed_password = pwd_context.hash(user_data.password)
-        
+
+        default_role = self.repo.find_one("roles", {"name": {"$ne": "Administrador"}})
+
+
+        if not default_role:
+            return {
+                "status": "error",
+                "message": "No se encontró un rol válido por defecto."
+            }
+
         user = {
             "username": user_data.username,
             "email": user_data.email,
-            "hashed_password": hashed_password,
-            "role": "user"
+            "password": hashed_password,
+            "role": default_role["name"]
         }
 
         self.repo.insert_one("users", user)

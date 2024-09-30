@@ -1,17 +1,13 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from domain.models import UserCreate
-from fastapi import Depends, FastAPI
+
 from fastapi.middleware.cors import CORSMiddleware
-from application.registration_use_case import RegistrationUseCase
-from application.login_use_case import LoginUseCase
-from application.user_crud_use_case import UserCrudUseCase
-from domain.repositories.mongo_repository import MongoRepository
-from domain.schemas import UserSchema
+from fastapi import FastAPI 
 
 import uvicorn
 from config import settings
+from routes import router
 
 app = FastAPI()
 
@@ -29,30 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Crear instancia del repositorio
-repo = MongoRepository()
-
-# Rutas para registro, login y CRUD de usuarios
-@app.post("/register")
-async def register(user_data: UserCreate, use_case: RegistrationUseCase = Depends(lambda: RegistrationUseCase(repo))):
-    try:
-        return use_case.register(user_data)
-    except ValueError as e:
-        return {"error": str(e)}
-
-
-@app.post("/login")
-async def login(credentials: dict, use_case: LoginUseCase = Depends(lambda: LoginUseCase(repo))):
-    return use_case.login(credentials["username"], credentials["password"])
-
-@app.get("/users", response_model=list[UserSchema])
-async def list_users(use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):
-    return use_case.get_all_users()
-
-
-@app.put("/users/{user_id}")
-async def update_user(user_id: str, updated_user: UserSchema, use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):
-    return use_case.update_user(user_id, updated_user)
+app.include_router(router)
 
 # Si el archivo es ejecutado directamente, iniciar Uvicorn
 if __name__ == "__main__":

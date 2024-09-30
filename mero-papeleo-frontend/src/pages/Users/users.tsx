@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { baseUrl } from '../../helpers/url';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 import '../../assets/css/Users.css';
 
@@ -10,6 +11,7 @@ interface User {
   username: string;
   email: string;
   role: string;
+  hashed_password: string;
 }
 
 const Usuarios: React.FC = () => {
@@ -33,14 +35,15 @@ const Usuarios: React.FC = () => {
   }, []);
 
   const handleEditClick = (user: User) => {
-    setEditedUser(user);  // Llenar los campos del modal con el usuario seleccionado
+    console.log("Usuario seleccionado para editar:", user.username);
+    setEditedUser(user);
     setShowModal(true);
   };
 
-  const handleDeleteClick = async (userId: string) => {
+  const handleDeleteClick = async (username: string) => {
     try {
-      await axios.delete(`${baseUrl}/users/${userId}`);
-      setUsers(users.filter((user) => user.id !== userId));
+      await axios.delete(`${baseUrl}/users/${username}`);
+      setUsers(users.filter((user) => user.username !== username));
     } catch (error) {
       console.error('Error al eliminar usuario:', error);
     }
@@ -48,13 +51,51 @@ const Usuarios: React.FC = () => {
 
   const handleSaveChanges = async () => {
     if (editedUser) {
-      try {
-        await axios.put(`${baseUrl}/users/${editedUser.id}`, editedUser);
-        setUsers(users.map((user) => (user.id === editedUser.id ? editedUser : user)));
-        setShowModal(false);
-      } catch (error) {
-        console.error('Error al actualizar usuario:', error);
+      console.log("Datos del usuario a actualizar:", editedUser);
+  
+      // Confirmación para guardar cambios
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Los cambios se guardarán.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, guardar cambios',
+      });
+  
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.put(`${baseUrl}/users/${editedUser.username}`, editedUser);
+          console.log("Respuesta de la actualización:", response.data);
+          setUsers(users.map((user) => (user.username === editedUser.username ? editedUser : user)));
+          setShowModal(false);
+          Swal.fire('¡Éxito!', response.data.message, 'success');
+        } catch (error) {
+          console.error('Error al actualizar usuario:', error);
+          Swal.fire('Error', "Error capt. en frontend", 'error');
+        }
       }
+    } else {
+      console.error('No hay usuario editado para actualizar.');
+    }
+  };
+  
+
+  const handleCancelChanges = async () => {
+    const result = await Swal.fire({
+      title: '¿Deseas descartar los cambios?',
+      text: "No se guardarán los cambios realizados.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, descartar cambios',
+    });
+
+    if (result.isConfirmed) {
+      setShowModal(false);
+      setEditedUser(null); // Restablecer el usuario editado
     }
   };
 
@@ -87,7 +128,7 @@ const Usuarios: React.FC = () => {
                 <tbody>
                   {users.length > 0 ? (
                     users.map((user) => (
-                      <tr key={user.id}>
+                      <tr key={user.username}>
                         <td>{user.username}</td>
                         <td>{user.email}</td>
                         <td className='text-center'>{user.role}</td>
@@ -95,7 +136,7 @@ const Usuarios: React.FC = () => {
                           <Button variant="primary" onClick={() => handleEditClick(user)}>
                             Editar
                           </Button>
-                          <Button variant="danger" onClick={() => handleDeleteClick(user.id)} className="ms-2">
+                          <Button variant="danger" onClick={() => handleDeleteClick(user.username)} className="ms-2">
                             Eliminar
                           </Button>
                         </td>
@@ -110,14 +151,13 @@ const Usuarios: React.FC = () => {
                   )}
                 </tbody>
               </Table>
-
             </div>
           </div>
         </div>
       </div>
 
       {/* Modal para editar el usuario */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={handleCancelChanges}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Usuario</Modal.Title>
         </Modal.Header>
@@ -131,6 +171,7 @@ const Usuarios: React.FC = () => {
                   name="username"
                   value={editedUser.username}
                   onChange={handleChange}
+                  readOnly // Haciendo que el campo sea solo lectura
                 />
               </Form.Group>
 
@@ -153,11 +194,22 @@ const Usuarios: React.FC = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
+
+              <Form.Group controlId="formPassword">
+                <Form.Label>Cambiar Contraseña</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  placeholder="Introduce nueva contraseña (opcional)"
+                  value={editedUser.hashed_password}
+                  onChange={handleChange}
+                />
+              </Form.Group>
             </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={handleCancelChanges}>
             Cerrar
           </Button>
           <Button variant="primary" onClick={handleSaveChanges}>

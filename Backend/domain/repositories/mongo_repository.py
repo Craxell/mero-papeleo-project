@@ -25,10 +25,16 @@ class MongoRepository:
         collection = self.mongoClient[collection_name]
         return collection.insert_many(documents)
 
-    def update_one(self, collection_name: str, query: dict, update: dict):
-        collection = self.mongoClient[collection_name]
-        return collection.update_one(query, {'$set': update})
+    def update_one(self, collection: str, query: dict, update: dict):
+        collection_ref = self.mongoClient[collection]
+        result = collection_ref.update_one(query, {"$set": update})
+        return result
+
 
     def delete_one(self, collection_name: str, query: dict):
         collection = self.mongoClient[collection_name]
         return collection.delete_one(query)
+
+    def get_roles(self) -> List[Dict[str, str]]:
+        roles_collection = self.mongoClient["roles"]
+        return list(roles_collection.find({}, {"_id": 0, "name": 1}))

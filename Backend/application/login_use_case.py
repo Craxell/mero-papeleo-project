@@ -33,7 +33,7 @@ class LoginUseCase:
         if not user:
             logger.warning(f"Intento de inicio de sesión fallido: usuario {username} no encontrado.")
             return False
-        if not pwd_context.verify(password, user["hashed_password"]):
+        if not pwd_context.verify(password, user["password"]):
             logger.warning(f"Intento de inicio de sesión fallido: contraseña incorrecta para el usuario {username}.")
             return False
         return user
