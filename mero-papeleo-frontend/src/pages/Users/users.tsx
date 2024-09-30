@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import '../../assets/css/Users.css';
 
 interface User {
-  id: string;
   username: string;
   email: string;
   role: string;

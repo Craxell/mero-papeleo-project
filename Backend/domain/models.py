@@ -5,7 +5,6 @@ class Token(BaseModel):
     token_type: str = "bearer"
 
 class UpdateUserRequest(BaseModel):
-    id: str
     email: str
     role: str
     password: str
