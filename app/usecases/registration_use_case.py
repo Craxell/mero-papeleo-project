@@ -1,5 +1,5 @@
-from domain.models import UserCreate
-from domain.repositories.mongo_repository import MongoRepository
+from core.models import UserCreate
+from adapters.mongo_repository import MongoRepository
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

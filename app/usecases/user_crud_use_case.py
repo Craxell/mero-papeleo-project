@@ -1,7 +1,7 @@
 from passlib.context import CryptContext
 from bson import ObjectId
-from domain.repositories.mongo_repository import MongoRepository
-from domain.schemas import UserSchema
+from adapters.mongo_repository import MongoRepository
+from core.models import UserSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -1,11 +1,10 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, Depends
-from domain.schemas import UserSchema, RoleSchema
-from domain.models import UpdateUserRequest, UserCreate
-from domain.repositories.mongo_repository import MongoRepository
-from application.registration_use_case import RegistrationUseCase
-from application.login_use_case import LoginUseCase
-from application.user_crud_use_case import UserCrudUseCase
+from core.models import UserSchema, RoleSchema, UpdateUserRequest, UserCreate
+from adapters.mongo_repository import MongoRepository
+from usecases.registration_use_case import RegistrationUseCase
+from usecases.login_use_case import LoginUseCase
+from usecases.user_crud_use_case import UserCrudUseCase
 
 
 repo = MongoRepository()
