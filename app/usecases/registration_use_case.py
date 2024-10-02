@@ -1,11 +1,11 @@
 from core.models import UserCreate
-from adapters.mongo_repository import MongoRepository
+from adapters.mongodb_adapter import MongoDBAdapter
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class RegistrationUseCase:
-    def __init__(self, repo: MongoRepository):
+    def __init__(self, repo: MongoDBAdapter):
         self.repo = repo
 
     def register(self, user_data: UserCreate):

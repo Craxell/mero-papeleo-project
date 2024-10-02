@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from app.configurations import settings
-from adapters.mongo_repository import MongoRepository
+from adapters.mongodb_adapter import MongoDBAdapter
 import logging
 
 # Configuración del logger
@@ -18,7 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class LoginUseCase:
-    def __init__(self, repo: MongoRepository):
+    def __init__(self, repo: MongoDBAdapter):
         self.repo = repo
 
     def validate_credentials(self, username: str, password: str):

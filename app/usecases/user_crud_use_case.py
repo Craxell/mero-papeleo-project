@@ -1,16 +1,16 @@
 from passlib.context import CryptContext
 from bson import ObjectId
-from adapters.mongo_repository import MongoRepository
+from adapters.mongodb_adapter import MongoDBAdapter
 from core.models import UserSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class UserCrudUseCase:
-    def __init__(self, repo: MongoRepository):
+    def __init__(self, repo: MongoDBAdapter):
         self.repo = repo
 
     def get_all_users(self):
-        users = self.repo.find_all("users")
+        users = self.repo.find_many("users")
         return [UserSchema(**{**user, "_id": str(user["_id"])}) for user in users]
 
 

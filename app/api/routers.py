@@ -1,13 +1,16 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, Depends
-from core.models import UserSchema, RoleSchema, UpdateUserRequest, UserCreate
-from adapters.mongo_repository import MongoRepository
+from core.models import *
+from adapters.mongodb_adapter import MongoDBAdapter
+
+
 from usecases.registration_use_case import RegistrationUseCase
 from usecases.login_use_case import LoginUseCase
 from usecases.user_crud_use_case import UserCrudUseCase
 
 
-repo = MongoRepository()
+# Repositorio de MongoDB
+repo = MongoDBAdapter()
 router = APIRouter()
 
 
