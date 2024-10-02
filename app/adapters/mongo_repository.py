@@ -1,4 +1,4 @@
-from infrastructure.mongo_client import MongoDBClient
+from adapters.mongodb_adapter import MongoDBClient
 from typing import List, Dict
 
 class MongoRepository:
