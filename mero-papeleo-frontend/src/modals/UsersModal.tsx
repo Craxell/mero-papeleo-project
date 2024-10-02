@@ -35,7 +35,7 @@ const UsersModal: React.FC<UsersModalProps> = ({
             <Form.Control
               type="text"
               name="username"
-              value={editedUser?.username || ''}
+              value={editedUser?.username}
               onChange={onChange}
               required
             />
@@ -45,7 +45,7 @@ const UsersModal: React.FC<UsersModalProps> = ({
             <Form.Control
               type="email"
               name="email"
-              value={editedUser?.email || ''}
+              value={editedUser?.email}
               onChange={onChange}
               required
             />
@@ -55,10 +55,12 @@ const UsersModal: React.FC<UsersModalProps> = ({
             <Form.Control
               as="select"
               name="role"
-              value={editedUser?.role || ''}
+              value={editedUser?.role}
               onChange={onChange}
             >
-              <option value="">Selecciona un rol</option>
+              <option value="" disabled hidden>
+                Selecciona un rol
+              </option>
               {roles.map((role) => (
                 <option key={role._id} value={role.name}>
                   {role.name}

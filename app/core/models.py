@@ -1,5 +1,4 @@
 import pydantic
-from bson import ObjectId
 import uuid
 
 
@@ -22,10 +21,10 @@ class Token(pydantic.BaseModel):
 
 
 class UpdateUserRequest(pydantic.BaseModel):
+    username: str
     email: str
     role: str
-    password: str
-
+    password: str = None
 
 class UserCreate(pydantic.BaseModel):
     username: str
@@ -34,7 +33,7 @@ class UserCreate(pydantic.BaseModel):
 
 
 class UserSchema(pydantic.BaseModel):
-    _id: str
+    id: int
     username: str
     email: pydantic.EmailStr
     role: str

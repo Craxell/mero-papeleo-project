@@ -11,6 +11,22 @@ class MongoDBAdapter:
     def get_database(self):
         """Devuelve la base de datos MongoDB."""
         return self.db_mongo
+    
+    def get_next_sequence(self, sequence_name: str) -> int:
+        """Obtiene el siguiente número de secuencia (autoincremento)."""
+        sequence_doc = self.db_mongo["counters"].find_one_and_update(
+            {"_id": sequence_name}, 
+            {"$inc": {"seq": 1}}, 
+            return_document=pymongo.ReturnDocument.AFTER,
+            upsert=True
+        )
+        return sequence_doc["seq"]
+
+    def insert_one(self, collection_name: str, document: dict):
+        """Inserta un documento en la colección."""
+        if 'id' not in document:
+            document['id'] = self.get_next_sequence(collection_name)  # Genera un nuevo id
+        return self.db_mongo[collection_name].insert_one(document)
 
     def find_one(self, collection_name: str, query: dict) -> dict:
         """Encuentra un documento que coincida con la consulta."""
@@ -19,10 +35,6 @@ class MongoDBAdapter:
     def find_many(self, collection_name: str, query: dict = {}) -> List[dict]:
         """Encuentra múltiples documentos que coincidan con la consulta."""
         return list(self.db_mongo[collection_name].find(query))
-
-    def insert_one(self, collection_name: str, document: dict):
-        """Inserta un documento en la colección."""
-        return self.db_mongo[collection_name].insert_one(document)
 
     def insert_many(self, collection_name: str, documents: List[dict]):
         """Inserta múltiples documentos en la colección."""

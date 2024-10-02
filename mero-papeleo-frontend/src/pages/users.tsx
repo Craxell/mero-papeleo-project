@@ -7,15 +7,13 @@ import '@sweetalert2/themes/wordpress-admin/wordpress-admin.min.css';
 import UsersModal from '../modals/UsersModal';
 import '../assets/css/Users.css';
 
-
 export interface User {
-  _id: string;
+  id: number; // Asegúrate de que este id sea un número
   username: string;
   email: string;
   role: string;
   password?: string;
 }
-
 
 export interface Role {
   _id: string;
@@ -33,6 +31,7 @@ const Usuarios: React.FC = () => {
       try {
         const response = await axios.get(`${baseUrl}/users`);
         const data: User[] = response.data;
+        console.log("Usuarios obtenidos:", data);
         setUsers(data);
       } catch (error) {
         console.error('Error al obtener usuarios:', error);
@@ -43,7 +42,7 @@ const Usuarios: React.FC = () => {
       try {
         const response = await axios.get(`${baseUrl}/roles`);
         setRoles(response.data);
-        console.log("Estos son los roles", response.data); // Debugging
+        console.log('Roles obtenidos:', response.data);
       } catch (error) {
         console.error('Error al obtener roles:', error);
       }
@@ -54,65 +53,71 @@ const Usuarios: React.FC = () => {
   }, []);
 
   const handleEditClick = (user: User) => {
-    console.log("Usuario seleccionado para editar:", user.username);
-    setEditedUser(user);
-    setShowModal(true);
-  };
-
-
-  const handleSaveChanges = async () => {
-    if (editedUser) {
-        console.log("Datos del usuario a actualizar:", editedUser);
-
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Los cambios se guardarán.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, guardar cambios',
-        });
-
-        if (result.isConfirmed) {
-            try {
-                const userData: any = {
-                    email: editedUser.email,
-                    role: editedUser.role,
-                };
-
-                if (editedUser.password && editedUser.password.trim() !== '') {
-                    userData.password = editedUser.password;
-                }
-
-                const response = await axios.put(`${baseUrl}/users/${editedUser.username}`, userData);
-                console.log("Respuesta de la actualización:", response.data);
-                
-                // Actualizamos el estado local si la actualización fue exitosa
-                setUsers(users.map((user) => (user.username === editedUser.username ? { ...user, ...userData } : user)));
-                setShowModal(false);
-                Swal.fire('¡Éxito!', response.data.message, 'success');
-            } catch (error) {
-                console.error('Error al actualizar usuario:', error);
-                if (axios.isAxiosError(error) && error.response) {
-                    const errorMessage = error.response.data.message || 'Error desconocido';
-                    Swal.fire('Error', errorMessage, 'error');
-                } else {
-                    Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
-                }
-            }
-        }
+    if (user.id) {
+      console.log('Usuario seleccionado para editar:', user);
+      setEditedUser(user);
+      setShowModal(true);
     } else {
-        console.error('No hay usuario editado para actualizar.');
+      console.error('Error: El usuario seleccionado no tiene un id válido');
     }
   };
 
+  const handleSaveChanges = async () => {
+    if (editedUser) {
+      console.log('Datos del usuario a actualizar:', editedUser);
 
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Los cambios se guardarán.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, guardar cambios',
+      });
+
+      if (result.isConfirmed) {
+        try {
+          const userData: any = {
+            id: editedUser.id.toString(),
+            username: editedUser.username,
+            email: editedUser.email,
+            role: editedUser.role,
+
+          };
+
+          if (editedUser.password && editedUser.password.trim() !== '') {
+            userData.password = editedUser.password;
+          }
+
+          // Usamos el id para la actualización
+          const response = await axios.put(`${baseUrl}/users/${editedUser.id}`, userData);
+          console.log('Respuesta de la actualización:', response.data);
+
+          // Actualizamos el estado local
+          setUsers(users.map((user) => (user.id === editedUser.id ? { ...user, ...userData } : user)));
+          setShowModal(false);
+          Swal.fire('¡Éxito!', response.data.message, 'success');
+        } catch (error) {
+          console.error('Error al actualizar usuario:', error);
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || 'Error desconocido';
+            console.error('Mensaje de error:', errorMessage); // Agregar para depuración
+            Swal.fire('Error', errorMessage, 'error');
+          } else {
+            Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
+          }
+        }
+      }
+    } else {
+      console.error('No hay usuario editado para actualizar.');
+    }
+  };
 
   const handleCancelChanges = async () => {
     const result = await Swal.fire({
       title: '¿Deseas descartar los cambios?',
-      text: "No se guardarán los cambios realizados.",
+      text: 'No se guardarán los cambios realizados.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -146,27 +151,27 @@ const Usuarios: React.FC = () => {
               <Table striped bordered hover responsive className="mx-auto" style={{ maxWidth: '80%' }}>
                 <thead>
                   <tr>
-                    <th className='text-center'>Nombre</th>
-                    <th className='text-center'>Email</th>
-                    <th className='text-center'>Rol</th>
-                    <th className='text-center'>Acciones</th>
+                    <th className="text-center">Nombre</th>
+                    <th className="text-center">Email</th>
+                    <th className="text-center">Rol</th>
+                    <th className="text-center">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.length > 0 ? (
                     users.map((user) => (
-                      <tr key={user.username}>
+                      <tr key={user.id}>
                         <td>{user.username}</td>
                         <td>{user.email}</td>
-                        <td className='text-center'>{user.role}</td>
-                        <td className='text-center'>
-                          <Button variant="primary" onClick={() => alert("Ver No implementado")} className="ms-2">
+                        <td className="text-center">{user.role}</td>
+                        <td className="text-center">
+                          <Button variant="primary" onClick={() => alert('Ver No implementado')} className="ms-2">
                             Ver
                           </Button>
                           <Button variant="success" onClick={() => handleEditClick(user)} className="ms-2">
                             Editar
                           </Button>
-                          <Button variant="danger" onClick={() => alert("Eliminar No implementado")} className="ms-2">
+                          <Button variant="danger" onClick={() => alert('Eliminar No implementado')} className="ms-2">
                             Eliminar
                           </Button>
                         </td>
