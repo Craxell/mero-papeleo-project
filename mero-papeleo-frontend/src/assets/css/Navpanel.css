@@ -1,0 +1,27 @@
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+}
+
+.nav-item {
+    transition: transform 0.3s ease;
+    padding: 5px 10px;
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.nav-item:hover {
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+.nav-item.active .nav-link {
+    color: var(--primaryCustom1);
+}
+
+@media (max-width: 768px) {
+    .nav-item:hover {
+        transform: scale(1.05);
+    }
+}

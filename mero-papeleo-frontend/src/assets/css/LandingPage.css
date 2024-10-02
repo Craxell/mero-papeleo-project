@@ -1,34 +1,63 @@
 .landing-page {
   text-align: center;
-  padding: 20px;
+  padding: 40px;
   background-color: #f9f9f9;
+  font-family: 'Arial', sans-serif;
 }
 
 .landing-header {
   margin-bottom: 40px;
 }
 
+.landing-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
 .tagline {
-  font-size: 1.2rem;
-  color: #555;
+  font-size: 1.3rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.auth-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 }
 
 .features {
   display: flex;
   justify-content: space-around;
-  margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .feature {
   background: #fff;
   padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 30%;
+  margin: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .feature h3 {
   margin-top: 0;
+  color: #333;
+}
+
+.feature p {
+  color: #555;
+  line-height: 1.5;
 }
 
 .landing-footer {

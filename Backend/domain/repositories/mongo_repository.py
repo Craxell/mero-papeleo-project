@@ -13,9 +13,9 @@ class MongoRepository:
         collection = self.mongoClient[collection_name]
         return list(collection.find(query))
 
-    def find_all(self, collection_name: str) -> List[dict]:
-        collection = self.mongoClient[collection_name]
-        return list(collection.find({}))
+    def find_all(self, collection_name: str):
+        return list(self.mongoClient[collection_name].find())  # Asegúrate de que esto devuelve todos los campos
+
 
     def insert_one(self, collection_name: str, document: dict):
         collection = self.mongoClient[collection_name]
@@ -27,8 +27,9 @@ class MongoRepository:
 
     def update_one(self, collection: str, query: dict, update: dict):
         collection_ref = self.mongoClient[collection]
-        result = collection_ref.update_one(query, {"$set": update})
+        result = collection_ref.update_one(query, {"$set": update})  # Usando $set
         return result
+
 
 
     def delete_one(self, collection_name: str, query: dict):

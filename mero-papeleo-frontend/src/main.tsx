@@ -1,6 +1,8 @@
-import './assets/css/main.css';
+import './assets/css/Main.css';
+import './assets/css/CustomColors.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

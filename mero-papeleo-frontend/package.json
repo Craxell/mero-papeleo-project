@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sweetalert2/themes": "^5.0.18",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "mero-papeleo-frontend": "file:",

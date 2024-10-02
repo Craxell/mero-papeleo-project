@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException, Depends
 from domain.schemas import UserSchema, RoleSchema
 from domain.models import UpdateUserRequest, UserCreate
@@ -22,9 +23,12 @@ async def register(user_data: UserCreate, use_case: RegistrationUseCase = Depend
 async def login(credentials: dict, use_case: LoginUseCase = Depends(lambda: LoginUseCase(repo))):
     return use_case.login(credentials["username"], credentials["password"])
 
-@router.get("/users", response_model=list[UserSchema])
-async def list_users(use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):
-    return use_case.get_all_users()
+@router.get("/users", response_model=List[UserSchema])
+async def get_all_users(use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):
+    users = use_case.get_all_users()
+    if not users:
+        raise HTTPException(status_code=404, detail="No users found")
+    return users
 
 @router.put("/users/{username}")
 async def update_user(username: str, user_data: UpdateUserRequest, use_case: UserCrudUseCase = Depends(lambda: UserCrudUseCase(repo))):

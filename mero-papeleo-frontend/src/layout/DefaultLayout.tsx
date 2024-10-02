@@ -1,13 +1,14 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import Navbar from "../components/navBar";
+import Navbar from "../components/Navpanel";
 
 const DefaultLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
+  // Si el usuario no está autenticado, redirige a la página de inicio
   if (!isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (

@@ -35,19 +35,21 @@ const AuthContext = createContext<AuthContextType>({
     username: null,
 });
 
-
 export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState<string | null>(null);
-    const [username, setUsername] = useState<string | null>(null); 
+    const [username, setUsername] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
+        const storedToken = sessionStorage.getItem('token');
+        const storedUsername = sessionStorage.getItem('username');
+        if (storedToken && storedUsername) {
             setToken(storedToken);
+            setUsername(storedUsername);
             setIsAuthenticated(true);
-            setUsername(localStorage.getItem('username'));
         }
+        setLoading(false);
     }, []);
 
     const login = async (username: string, password: string) => {
@@ -57,8 +59,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 const newToken = response.data.access_token;
                 setToken(newToken);
                 setUsername(username);
-                localStorage.setItem('token', newToken);
-                localStorage.setItem('username', username);
+                sessionStorage.setItem('token', newToken);
+                sessionStorage.setItem('username', username);
                 setIsAuthenticated(true);
                 return response.data; 
             } else {
@@ -69,8 +71,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setIsAuthenticated(false);
             setToken(null);
             setUsername(null);
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('username');
             throw error;
         }
     };
@@ -79,8 +81,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(false);
         setToken(null);
         setUsername(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('username');
     };
 
     const register = async (username: string, email: string, password: string) => {
@@ -112,6 +114,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         return () => axios.interceptors.request.eject(interceptor);
     }, [token]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <AuthContext.Provider value={{ 

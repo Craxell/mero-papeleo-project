@@ -11,19 +11,34 @@ class UserCrudUseCase:
 
     def get_all_users(self):
         users = self.repo.find_all("users")
-        return [UserSchema(**user) for user in users]
+        return [UserSchema(**{**user, "_id": str(user["_id"])}) for user in users]
 
-    def get_user_by_username(self, username: str):
-        user = self.repo.find_one("users", {"username": username})
-        return UserSchema(**user) if user else None
+
+
 
     def update_user(self, username: str, updated_user: dict):
-        # Si la contraseña está presente y no es vacía, la hashamos
-        if 'password' in updated_user and updated_user['password']:
-            updated_user['password'] = pwd_context.hash(updated_user['password'])
+        user = self.repo.find_one("users", {"username": username})
 
-        result = self.repo.update_one("users", {"username": username}, updated_user)
+        if not user:
+            raise ValueError("Usuario no encontrado.")
+
+        update_fields = {}
+
+        if 'password' in updated_user and updated_user['password']:
+            update_fields['password'] = pwd_context.hash(updated_user['password'])
+        
+        if 'email' in updated_user and updated_user['email'] != user['email']:
+            update_fields['email'] = updated_user['email']
+
+        if 'role' in updated_user and updated_user['role'] != user['role']:
+            update_fields['role'] = updated_user['role']
+
+        if not update_fields:
+            return False
+
+        result = self.repo.update_one("users", {"username": username}, update_fields)
         return result.modified_count > 0
+
 
     def delete_user(self, user_id: str):
         return self.repo.delete_one("users", {"_id": ObjectId(user_id)})
