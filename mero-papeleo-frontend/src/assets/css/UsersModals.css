@@ -1,0 +1,17 @@
+.btnCerrarEditUserModal{
+    background-color: var(--primaryCustom2);
+    --bs-btn-border-color: var(--primaryCustom1);
+    --bs-btn-active-bg: var(--primaryCustom2);
+    --bs-btn-active-border-color: var(--primaryCustom2);
+}
+
+
+.btnCerrarEditUserModal:hover{
+    background-color: var(--primaryCustom2);
+    --bs-btn-hover-border-color: var(--primaryCustom2);
+}
+
+.btnCerrarEditUserModal:focus{
+    background-color: var(--primaryCustom2);
+    --bs-btn-hover-border-color: var(--primaryCustom2);
+}

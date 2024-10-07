@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { User, Role } from '../pages/users';
+import "../assets/css/UsersModals.css";
 
 type FormControlElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
@@ -26,7 +27,8 @@ const UsersModal: React.FC<UsersModalProps> = ({
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>{editedUser ? 'Editar Usuario' : 'Agregar Usuario'}</Modal.Title>
+        {/* Revisar esto */}
+        <Modal.Title>{editedUser ? 'Editar Usuario' : 'Agregar Usuario'}</Modal.Title>  
       </Modal.Header>
       <Modal.Body>
         <Form>

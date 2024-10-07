@@ -4,7 +4,8 @@ import { baseUrl } from '../helpers/url';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '@sweetalert2/themes/wordpress-admin/wordpress-admin.min.css';
-import UsersModal from '../modals/UsersModal';
+import UsersModal from '../modals/EditUsersModal';
+import ViewUserModal from '../modals/ViewUsersModal';
 import '../assets/css/Users.css';
 
 export interface User {
@@ -24,6 +25,8 @@ const Usuarios: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editedUser, setEditedUser] = useState<User | null>(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [viewedUser, setViewedUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
 
   useEffect(() => {
@@ -59,6 +62,37 @@ const Usuarios: React.FC = () => {
       setShowModal(true);
     } else {
       console.error('Error: El usuario seleccionado no tiene un id válido');
+    }
+  };
+
+  const handleViewClick = (user: User) => {
+    setViewedUser(user);
+    setShowViewModal(true); // Muestra el modal de visualización
+  };
+
+  const handleDeleteClick = async (userId: number) => {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.delete(`${baseUrl}/users/${userId}`);
+        console.log('Usuario eliminado:', response.data);
+  
+        // Actualizar el estado local para eliminar el usuario
+        setUsers(users.filter(user => user.id !== userId));
+        Swal.fire('¡Eliminado!', 'El usuario ha sido eliminado.', 'success');
+      } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+      }
     }
   };
 
@@ -165,13 +199,13 @@ const Usuarios: React.FC = () => {
                         <td>{user.email}</td>
                         <td className="text-center">{user.role}</td>
                         <td className="text-center">
-                          <Button variant="primary" onClick={() => alert('Ver No implementado')} className="ms-2">
+                          <Button variant="primary" onClick={() => handleViewClick(user)} className="ms-2">
                             Ver
                           </Button>
                           <Button variant="success" onClick={() => handleEditClick(user)} className="ms-2">
                             Editar
                           </Button>
-                          <Button variant="danger" onClick={() => alert('Eliminar No implementado')} className="ms-2">
+                          <Button variant="danger" onClick={() => handleDeleteClick(user.id)} className="ms-2">
                             Eliminar
                           </Button>
                         </td>
@@ -190,7 +224,6 @@ const Usuarios: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Aquí se usa el Modal */}
       <UsersModal
         show={showModal}
@@ -200,6 +233,12 @@ const Usuarios: React.FC = () => {
         onSave={handleSaveChanges}
         onCancel={handleCancelChanges}
         roles={roles}
+      />
+      {/* Modal para ver detalles del usuario */}
+      <ViewUserModal
+        show={showViewModal}
+        onHide={() => setShowViewModal(false)}
+        user={viewedUser}
       />
     </div>
   );
