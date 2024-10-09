@@ -1,17 +1,21 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card';
 import '../assets/css/LandingPage.css';
 import AuthForm from '../components/AuthForm';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
-      <header className="landing-header">
-        <h1>Bienvenido a Mero Papeleo</h1>
-        <p className="tagline">La solución perfecta para gestionar tus documentos.</p>
-        <section className="auth-section">
+      <Card className='title_lanPage'>
+        <Card.Body><h1>Bienvenido a Mero Papeleo</h1></Card.Body>
+        <header className="landing-header">
+        <p className="tagline">La ayuda perfecta para tus articulos</p>
+      </header>
+      </Card>
+      <section className="auth-section">
           <AuthForm />
         </section>
-      </header>
+      
 
       <h2>Características</h2>
       <section className="features">
