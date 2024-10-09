@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { baseUrl } from '../helpers/url';
+import { BaseUrl } from '../auth/BaseUrl';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '@sweetalert2/themes/wordpress-admin/wordpress-admin.min.css';
@@ -32,7 +32,7 @@ const Usuarios: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/users`);
+        const response = await axios.get(`${BaseUrl}/users`);
         const data: User[] = response.data;
         console.log("Usuarios obtenidos:", data);
         setUsers(data);
@@ -43,7 +43,7 @@ const Usuarios: React.FC = () => {
 
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/roles`);
+        const response = await axios.get(`${BaseUrl}/roles`);
         setRoles(response.data);
         console.log('Roles obtenidos:', response.data);
       } catch (error) {
@@ -83,7 +83,7 @@ const Usuarios: React.FC = () => {
   
     if (result.isConfirmed) {
       try {
-        const response = await axios.delete(`${baseUrl}/users/${userId}`);
+        const response = await axios.delete(`${BaseUrl}/users/${userId}`);
         console.log('Usuario eliminado:', response.data);
   
         // Actualizar el estado local para eliminar el usuario
@@ -125,7 +125,7 @@ const Usuarios: React.FC = () => {
           }
 
           // Usamos el id para la actualización
-          const response = await axios.put(`${baseUrl}/users/${editedUser.id}`, userData);
+          const response = await axios.put(`${BaseUrl}/users/${editedUser.id}`, userData);
           console.log('Respuesta de la actualización:', response.data);
 
           // Actualizamos el estado local
