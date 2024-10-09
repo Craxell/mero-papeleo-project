@@ -1,6 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import axios from 'axios';
-import { baseUrl } from '../helpers/url';
+import { BaseUrl } from './BaseUrl';
 
 interface LoginResponse {
     token: string;
@@ -19,7 +19,8 @@ interface AuthContextType {
     logout: () => void;
     register: (username: string, email: string, password: string) => Promise<RegisterResponse>;
     token: string | null;
-    username: string | null; 
+    username: string | null;
+    role: string | null;
 }
 
 interface AuthProviderProps {
@@ -33,20 +34,24 @@ const AuthContext = createContext<AuthContextType>({
     register: async () => Promise.resolve({ success: false, message: '' }),
     token: null,
     username: null,
+    role: null,
 });
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
+    const [role, setRole] = useState<string | null >(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedToken = sessionStorage.getItem('token');
         const storedUsername = sessionStorage.getItem('username');
+        const storedRole = sessionStorage.getItem("role")
         if (storedToken && storedUsername) {
             setToken(storedToken);
             setUsername(storedUsername);
+            setRole(storedRole);
             setIsAuthenticated(true);
         }
         setLoading(false);
@@ -54,13 +59,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const login = async (username: string, password: string) => {
         try {
-            const response = await axios.post(`${baseUrl}/login`, { username, password });
+            const response = await axios.post(`${BaseUrl}/login`, { username, password });
             if (response.data.status === 'success') {
-                const newToken = response.data.access_token;
-                setToken(newToken);
+                // const newToken = response.data.access_token;
+                const {access_token, role} = response.data;
+                setToken(access_token);
                 setUsername(username);
-                sessionStorage.setItem('token', newToken);
+                setRole(role);
+                sessionStorage.setItem('token', access_token);
                 sessionStorage.setItem('username', username);
+                sessionStorage.setItem('role', role);
                 setIsAuthenticated(true);
                 return response.data; 
             } else {
@@ -73,6 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUsername(null);
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('username');
+            sessionStorage.removeItem('role');
             throw error;
         }
     };
@@ -81,13 +90,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(false);
         setToken(null);
         setUsername(null);
+        setRole(null);
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('username');
+        sessionStorage.removeItem('role');
     };
 
     const register = async (username: string, email: string, password: string) => {
         try {
-            const response = await axios.post(`${baseUrl}/register`, { username, email, password });
+            const response = await axios.post(`${BaseUrl}/register`, { username, email, password });
             if (response.data.status === 'success') {
                 return response.data.message;
             } else if (response.data.message) {
@@ -126,7 +137,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             logout, 
             register,
             token, 
-            username 
+            username,
+            role,
         }}>
             {children}
         </AuthContext.Provider>

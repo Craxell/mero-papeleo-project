@@ -6,21 +6,33 @@ import Dashboard from './pages/dashboard';
 import Usuarios from './pages/users';
 import Prompt from './pages/prompt';
 import NotFoundPage from './components/NotFoundPage';
+import ProtectedRoute from './components/ProtectedRoutes';
+import Unauthorized from './components/Unauthorized';
 
 const App: React.FC = () => {
   return (
     <Routes>
-      {/* Rutas públicas */}
       <Route path="/" element={<LandingPage />} />
 
       {/* Rutas protegidas */}
       <Route element={<DefaultLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users" element={<Usuarios />} />
-        <Route path="/prompt" element={<Prompt />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute requiredRoles={["Administrador", "Usuario"]} unauthorizedComponent={<Unauthorized />}>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/users" element={
+          <ProtectedRoute requiredRoles={["Administrador"]} unauthorizedComponent={<Unauthorized />}>
+            <Usuarios />
+          </ProtectedRoute>
+        } />
+        <Route path="/prompt" element={
+          <ProtectedRoute requiredRoles={["Administrador", "Usuario"]} unauthorizedComponent={<Unauthorized />}>
+            <Prompt />
+          </ProtectedRoute>
+        } />
       </Route>
 
-      {/* NotFoundRoute */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
