@@ -6,13 +6,13 @@
 }
 
 .title_lanPage{
-  background: rgb(73,67,181);
-  background: linear-gradient(90deg, rgba(73,67,181,1) 0%, rgba(26,26,171,1) 9%, rgba(51,67,153,1) 28%, rgba(10,182,217,1) 65%);
+  background:#6363cb;
   color: rgb(255, 255, 255);
   h1{font-size: 500%};
   font-family: "Niconne", cursive;
   font-weight: 400;
   font-style: normal;
+  width: 100%;
 }
 
 .landing-header {
@@ -33,10 +33,18 @@
 }
 
 .auth-section {
+  font-family: Andale Mono, monospace;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+}
+
+.card_auth{
+  background:#fdfdff;
+  width: 25%;
+  margin: 40px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .features {

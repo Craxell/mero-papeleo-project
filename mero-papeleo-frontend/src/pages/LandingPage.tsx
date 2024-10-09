@@ -12,9 +12,12 @@ const LandingPage: React.FC = () => {
         <p className="tagline">La ayuda perfecta para tus articulos</p>
       </header>
       </Card>
-      <section className="auth-section">
+
+      <Card className='card_auth'>
+        <section className="auth-section">
           <AuthForm />
         </section>
+      </Card>
       
 
       <h2>Características</h2>
