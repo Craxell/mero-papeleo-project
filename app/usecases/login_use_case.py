@@ -63,12 +63,14 @@ class LoginUseCase:
                 "headers": {"WWW-Authenticate": "Bearer"}
             }
         
-        access_token = self.create_access_token(data={"sub": user["username"], "username": user["username"]})
+        role = user.get("role", "user")
+        access_token = self.create_access_token(data={"sub": user["username"], "username": user["username"], "role": role})
         logger.info(f"Inicio de sesión exitoso para el usuario: {username}")
         return {
             "status": "success",
             "username": username,
             "message": f"Bienvenido {username}",
             "access_token": access_token,
+            "role": role,
             "token_type": "bearer"
         }

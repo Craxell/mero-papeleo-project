@@ -42,4 +42,7 @@ class RegistrationUseCase:
         }
 
         self.repo.insert_one("users", user)
-        return {"status": "success", "message": "Usuario registrado con éxito."}
+        return {
+            "status": "success", 
+            "message": "Usuario registrado con éxito."
+        }
