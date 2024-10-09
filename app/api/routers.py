@@ -31,15 +31,19 @@ async def get_all_users(use_case: UserCrudCase = Depends(lambda: UserCrudCase(re
 @router.put("/users/{id}")
 async def update_user(id: int, user_data: UpdateUserRequest, use_case: UserCrudCase = Depends(lambda: UserCrudCase(repo))):
     try:
-        updated = use_case.update_user(id, user_data.dict(exclude_unset=True))
-        if not updated:
-            raise HTTPException(status_code=404, detail="User not found")
-        return {"message": "Usuario actualizado correctamente"}
+        result = use_case.update_user(id, user_data.dict(exclude_unset=True))
+        if result is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        if result is True:
+            return {"message": "Usuario actualizado correctamente"}
+        return {"message": result}  # Manejar el caso de no cambios
     except HTTPException as http_err:
         raise http_err
     except Exception as e:
-        print(f"Error al actualizar el usuario: {e}")
-        raise HTTPException(status_code=500, detail="No se pudo guardar los cambios")
+        print(f"Error al actualizar el usuario: {e}")  # Asegúrate de que se imprima el error
+        raise HTTPException(status_code=500, detail=str(e))  # Incluye el mensaje de error en la respuesta
+
+
 
 @router.delete("/users/{id}")
 async def delete_user(id: int, use_case: UserCrudCase = Depends(lambda: UserCrudCase(repo))):

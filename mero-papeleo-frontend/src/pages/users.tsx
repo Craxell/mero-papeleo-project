@@ -9,7 +9,7 @@ import ViewUserModal from '../modals/ViewUsersModal';
 import '../assets/css/Users.css';
 
 export interface User {
-  id: number; // Asegúrate de que este id sea un número
+  id: number;
   username: string;
   email: string;
   role: string;
@@ -67,7 +67,7 @@ const Usuarios: React.FC = () => {
 
   const handleViewClick = (user: User) => {
     setViewedUser(user);
-    setShowViewModal(true); // Muestra el modal de visualización
+    setShowViewModal(true);
   };
 
   const handleDeleteClick = async (userId: number) => {
@@ -85,8 +85,6 @@ const Usuarios: React.FC = () => {
       try {
         const response = await axios.delete(`${BaseUrl}/users/${userId}`);
         console.log('Usuario eliminado:', response.data);
-  
-        // Actualizar el estado local para eliminar el usuario
         setUsers(users.filter(user => user.id !== userId));
         Swal.fire('¡Eliminado!', 'El usuario ha sido eliminado.', 'success');
       } catch (error) {
@@ -124,19 +122,19 @@ const Usuarios: React.FC = () => {
             userData.password = editedUser.password;
           }
 
-          // Usamos el id para la actualización
           const response = await axios.put(`${BaseUrl}/users/${editedUser.id}`, userData);
           console.log('Respuesta de la actualización:', response.data);
-
-          // Actualizamos el estado local
+          const responseMessage = response.data.message?.message;
           setUsers(users.map((user) => (user.id === editedUser.id ? { ...user, ...userData } : user)));
           setShowModal(false);
-          Swal.fire('¡Éxito!', response.data.message, 'success');
+          Swal.fire('¡Éxito!', responseMessage, 'success');
+          
+          
         } catch (error) {
           console.error('Error al actualizar usuario:', error);
           if (axios.isAxiosError(error)) {
-            const errorMessage = error.response?.data?.message || 'Error desconocido';
-            console.error('Mensaje de error:', errorMessage); // Agregar para depuración
+            const errorMessage = error.response?.data?.detail;
+            console.error('Mensaje de error:', errorMessage);
             Swal.fire('Error', errorMessage, 'error');
           } else {
             Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
