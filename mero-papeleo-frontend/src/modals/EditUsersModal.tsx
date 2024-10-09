@@ -85,7 +85,7 @@ const UsersModal: React.FC<UsersModalProps> = ({
         <Button variant="secondary" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button variant="primary" onClick={onSave}>
+        <Button className="guardarBTN_Edit" variant="primary" onClick={onSave}>
           Guardar Cambios
         </Button>
       </Modal.Footer>

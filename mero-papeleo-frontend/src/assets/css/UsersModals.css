@@ -15,3 +15,21 @@
     background-color: var(--primaryCustom2);
     --bs-btn-hover-border-color: var(--primaryCustom2);
 }
+
+
+.guardarBTN_Edit{
+    --bs-btn-border-color: var(--primaryCustom1);
+    --bs-btn-active-border-color: var(--primaryCustom2);
+    background-color: var(--primaryCustom2);
+    --bs-btn-hover-border-color: var(--primaryCustom2);
+}
+
+.guardarBTN_Edit:focus{
+    background-color: var(--primaryCustom1);
+    --bs-btn-hover-border-color: var(--primaryCustom2);
+}
+
+.guardarBTN_Edit:hover{
+    background-color: var(--primaryCustom1);
+    --bs-btn-hover-border-color: var(--primaryCustom2);
+}
