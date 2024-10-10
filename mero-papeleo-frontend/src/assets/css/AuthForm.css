@@ -1,6 +1,6 @@
 .auth-container {
     position: relative;
-    width: 300px;
+    width: 400px;
     height: 400px;
     perspective: 1000px;
     margin: auto;
@@ -53,8 +53,10 @@
     border-radius: 5px;
 }
 
+
 .form-inner.back {
     padding: 20px;
     border-radius: 5px;
     transform: rotateY(180deg);
+    margin-top: -70px; /* Ajusta este valor según sea necesario */
 }
