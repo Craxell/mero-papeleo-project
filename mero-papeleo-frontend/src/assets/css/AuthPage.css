@@ -1,0 +1,20 @@
+.container-auth :root{
+    height: 100%;
+    width: 100%;
+    background-color: var(--colorCustom);
+}
+
+.button-back{
+    background-color: var(--colorCustom2);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer; 
+    transition: background-color 0.3s;
+    margin: 10px;
+}
+
+.button-back:hover {
+    background-color: var(--colorCustom);
+}

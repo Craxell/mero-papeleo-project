@@ -143,6 +143,8 @@ const AuthForm = () => {
       <div className={`flip-card ${!isLogin ? 'flipped' : ''}`}>
         <div className="form-inner front">
           <h1 className="title">Iniciar Sesión</h1>
+          <br />
+          <br />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2">
               <Form.Label>Nombre de Usuario</Form.Label>
@@ -155,6 +157,7 @@ const AuthForm = () => {
               />
               {errors.username && <Form.Text className="text-danger"></Form.Text>}
             </Form.Group>
+            <br />
             <Form.Group className="mb-2">
               <Form.Label>Contraseña</Form.Label>
               <div className="input-group">
@@ -174,7 +177,8 @@ const AuthForm = () => {
             <Button variant="primary" type="submit" className="auth-button">
               Iniciar Sesión
             </Button>
-            <Form.Text className="text-muted">
+            <br />
+            <Form.Text className="text-muted flip-button-custom">
               <Button variant="link" onClick={() => setIsLogin(false)}>
                 Regístrate
               </Button>
@@ -183,7 +187,7 @@ const AuthForm = () => {
         </div>
         
         <div className="form-inner back">
-          <h2 className="mt-5">Registro</h2>
+          <h2 className="mt-5 title">Registro</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2">
               <Form.Label>Nombre de Usuario</Form.Label>
@@ -243,10 +247,11 @@ const AuthForm = () => {
               {errors.confirmPassword && <Form.Text className="text-danger"></Form.Text>}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="auth-button">
+            <Button variant="primary" type="submit" className="auth-button2">
               Registrarse
             </Button>
-            <Form.Text className="text-muted">
+            <br />
+            <Form.Text className="text-muted flip-button-custom2">
               <Button variant="link" onClick={() => setIsLogin(true)}>
                 Inicia sesión
               </Button>

@@ -8,11 +8,13 @@ import Prompt from './pages/prompt';
 import NotFoundPage from './components/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoutes';
 import Unauthorized from './components/Unauthorized';
+import AuthPage from './pages/AuthPage';
 
 const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<AuthPage />} />
 
       {/* Rutas protegidas */}
       <Route element={<DefaultLayout />}>

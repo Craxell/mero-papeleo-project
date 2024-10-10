@@ -1,4 +1,4 @@
-import './assets/css/Main.css';
+import './assets/css/main.css';
 import './assets/css/CustomColors.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';

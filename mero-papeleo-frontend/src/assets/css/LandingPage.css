@@ -84,3 +84,20 @@
   font-size: 0.9rem;
   color: #777;
 }
+
+.button-login-custom {
+  background-color: var(--colorCustom);
+  color: white;
+  border: var(--colorCustom2) solid 4px;
+  padding: 10px 20px;
+  border-radius: 0 5px 0 5px;
+  cursor: pointer; 
+  transition: background-color 0.3s;
+  text-decoration: none; 
+  width: 10%;
+  align-self: end;
+}
+
+.button-login-custom:hover {
+  background-color: var(--colorCustom2);
+}

@@ -17,7 +17,7 @@
 }
 
 .nav-item.active .nav-link {
-    color: var(--primaryCustom2);
+    color: var(--colorCustom4);
 }
 
 @media (max-width: 768px) {

@@ -1,31 +1,50 @@
 .auth-container {
     position: relative;
     width: 400px;
-    height: 400px;
+    height: 450px;
     perspective: 1000px;
     margin: auto;
 }
 
 .auth-button {
-    background-color: var(--primaryCustom1);
+    background-color: var(--colorCustom2);
     border: none;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer; 
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
+    margin: 10px;
+    position: absolute;
+    bottom: 15%;
+    left: 20%;
+}
+
+.auth-button2 {
+    background-color: var(--colorCustom2);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer; 
+    transition: background-color 0.3s;
+    margin: 10px;
+    position: absolute;
+    left: 25%;
 }
 
 .auth-button:hover {
-    background-color: var(--primaryCustom2);
+    background-color: var(--colorCustom);
+}
+
+.auth-button2:hover {
+    background-color: var(--colorCustom);
 }
 
 .link-button {
-    color: var(--primaryCustom2);
+    color: var(--colorCustom2);
     text-decoration: underline;
 }
-
-
 
 .flip-card {
     position: absolute;
@@ -53,10 +72,37 @@
     border-radius: 5px;
 }
 
-
 .form-inner.back {
     padding: 20px;
     border-radius: 5px;
     transform: rotateY(180deg);
     margin-top: -70px; /* Ajusta este valor según sea necesario */
+}
+
+.title {
+    color: var(--colorCustom2);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 200%;
+}
+
+.flip-button-custom {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    bottom: 5%;
+    left: 25%;
+    width: 50%;
+}
+
+.flip-button-custom2 {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    bottom: -18%;
+    left: 25%;
+    width: 50%;
 }
