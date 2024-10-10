@@ -1,0 +1,74 @@
+.prompt-custom {
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 195%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prompt-title-custom{
+    color: var(--colorCustom2);
+    font-size: 400%;
+}
+
+.chat-prompt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border: 3px dotted var(--colorCustom);
+    border-radius: 10px;
+    width: 75%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+.contenido-prompt {
+    width: 85%;
+    justify-content: center;
+    align-self: center;
+}
+
+.split-prompt {
+    width: 90%;
+    justify-content: center;
+    align-self: center;
+}
+
+.div-prompt {
+    display: flex;
+    justify-content: center;
+}
+
+.button-file {
+    background-color: var(--colorCustom);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 4%;
+    height: 38px;
+    margin-top: 10px;
+    margin: auto 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+.button-file:hover {
+    background-color: var(--colorCustom3);
+}
+
+.imageUpload {
+    width: 20px;
+    height: 20px;
+}
+
+.input-prompt{
+    width: 1000px;
+    margin: 20px 0 ;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);    
+}

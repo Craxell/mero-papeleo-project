@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { User, Role } from '../pages/users';
+import { User, Role } from '../pages/Users';
 import "../assets/css/UsersModals.css";
 
 type FormControlElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;

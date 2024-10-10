@@ -1,6 +1,7 @@
 .navbar {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: visible;
+    width: 100%;
 }
 
 .nav-item {
@@ -25,11 +26,24 @@
         transform: scale(1.05);
         color: #8d8d8d;
     }
+
+    .navbar {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: visible;
+        width: 190%;
+    }
+}
+
+@media (min-width: 768px) {
+    .nav-item:hover {
+        transform: scale(1.05);
+        color: #8d8d8d;
+    }
 }
 
 .navbar-brand {
     font-size: 1.5rem;
-    margin-left: 10px;
+    margin-left: 15px;
     color: #ffffff;
 }
 
@@ -46,4 +60,9 @@
 
 .nav-custom {
     background-color: var(--colorCustom);
+    margin-right: 10px;
+}
+
+.navbar-nav {
+    margin-right: 10px;
 }

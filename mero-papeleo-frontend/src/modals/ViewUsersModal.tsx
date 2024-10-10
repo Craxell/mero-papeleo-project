@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { User } from '../pages/users';
+import { User } from '../pages/Users';
 import "../assets/css/UsersModals.css";
 
 interface ViewUsersModalProps {

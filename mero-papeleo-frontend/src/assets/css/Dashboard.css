@@ -1,0 +1,12 @@
+.dashboard-custom {
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 195%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-title-custom{
+    color: var(--colorCustom2);
+    font-size: 400%;
+}
