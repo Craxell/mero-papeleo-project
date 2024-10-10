@@ -16,6 +16,9 @@ python-dotenv = "^1.0.1"
 bcrypt = "^4.2.0"
 chromadb = "^0.5.7"
 coverage = "^7.6.1"
+tiktoken = "^0.8.0"
+pypdf2 = "^3.0.1"
+python-docx = "^1.1.2"
 
 
 [build-system]
