@@ -26,8 +26,8 @@ const Navbar: React.FC = () => {
           </li>
           {isAuthenticated && (
             <>
-              <li className="nav-item">
-                <span className="nav-link">Hola, {username}</span>
+              <li className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+                <Link className="nav-link" to="/profile">Hola, {username}</Link>
               </li>
               <li className="nav-item">
                 <button className="nav-link btn btn-link" onClick={logout}>Cerrar sesión</button>

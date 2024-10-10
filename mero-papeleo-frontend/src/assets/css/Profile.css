@@ -1,0 +1,25 @@
+.profile-custom {
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 195%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-title-custom{
+    color: var(--colorCustom2);
+    font-size: 400%;
+}
+
+.contenido-profile {
+    width: 85%;
+    justify-content: center;
+    align-self: center;
+}
+
+.split-profile {
+    width: 90%;
+    justify-content: center;
+    align-self: center;
+}
