@@ -6,7 +6,7 @@
 }
 
 .title_lanPage{
-  background:#6363cb;
+  background:var(--colorCustom);
   color: rgb(255, 255, 255);
   h1{font-size: 500%};
   font-family: "Niconne", cursive;

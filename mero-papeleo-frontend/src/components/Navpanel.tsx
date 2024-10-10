@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
   const { username, isAuthenticated, logout } = useAuth();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar nav-custom navbar-expand-lg navbar-light">
       <Link className="navbar-brand" to="#">Mero Papeleo</Link>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
