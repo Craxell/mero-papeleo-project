@@ -8,7 +8,7 @@
     padding: 5px 10px;
     display: inline-block;
     white-space: nowrap;
-    margin: 0;
+    margin-left: 15px;
 }
 
 .nav-item:hover {
@@ -17,11 +17,33 @@
 }
 
 .nav-item.active .nav-link {
-    color: var(--primaryCustom1);
+    color: var(--primaryCustom2);
 }
 
 @media (max-width: 768px) {
     .nav-item:hover {
         transform: scale(1.05);
+        color: #8d8d8d;
     }
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    color: #ffffff;
+}
+
+.navbar-brand:hover {
+    color: #ffffff;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-custom {
+    background-color: var(--colorCustom);
 }

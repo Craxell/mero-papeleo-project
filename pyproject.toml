@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = {extras = ["all"], version = "^0.114.2"}
+fastapi = {extras = ["all"], version = "^0.115.0"}
 pymongo = "^4.8.0"
 python-jose = "^3.3.0"
 passlib = "^1.7.4"
