@@ -22,7 +22,7 @@ class Settings(BaseSettings):
 
     class Config:
         # Determina la ruta raíz del proyecto (sube dos niveles desde Backend/app/)
-        project_root = Path(__file__).resolve().parents[2]
+        project_root = Path(__file__).resolve().parents[1]
         env_file = project_root / ".env"
         # Busca el archivo .env en la raíz del proyecto
 
