@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { generateAnswerRequest } from '../assets/ts/functions_Prompt';
 
 const Prompt: React.FC = () => {
 
