@@ -35,7 +35,7 @@ const Prompt: React.FC = () => {
 
     setLoading(true);
     setError(null);
-
+ 
     try {
       await uploadDocumentRequest(formData); // Sin 'id' aquí
       setSelectedFile(null);

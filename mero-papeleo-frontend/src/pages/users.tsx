@@ -79,7 +79,7 @@ const Usuarios: React.FC = () => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, eliminar',
-    });
+    }); 
   
     if (result.isConfirmed) {
       try {
