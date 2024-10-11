@@ -1,5 +1,4 @@
-import tiktoken # Importar la librería tiktoken para tokenizar el texto y dividirlo en chunks de tamaño máximo
-import asyncio  # Para operaciones asíncronas
+import tiktoken
 
 def get_openai_embeddings(text: str, openai_client) -> list[float]:
     response = openai_client._openai_client.embeddings.create(
