@@ -1,7 +1,7 @@
 import { Form, Image, Button } from "react-bootstrap";
 import "../assets/css/Prompt.css";
 import upload from "../assets/images/upload.png";
-import { uploadDocumentRequest } from "../assets/ts/functions_Prompt";
+import { generateAnswerRequest, uploadDocumentRequest } from "../assets/ts/functions_Prompt";
 import { useState } from "react";
 
 const Prompt: React.FC = () => {
@@ -37,7 +37,7 @@ const Prompt: React.FC = () => {
     setError(null);
  
     try {
-      await uploadDocumentRequest(formData); // Sin 'id' aquí
+      await uploadDocumentRequest(formData);
       setSelectedFile(null);
     } catch (err) {
       setError("Error al subir el archivo. Por favor, inténtalo de nuevo.");
@@ -48,7 +48,30 @@ const Prompt: React.FC = () => {
   };
 
   const handleAskQuestion = async () => {
-    // Implementa la lógica aquí
+
+    if(!question){
+      setError("Por favor, ingresa una pregunta.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const answer = await generateAnswerRequest(question);
+      if(answer){
+        setResponses([...responses, {question, answer}]);
+        setQuestion("");
+      }else{
+        setError("No se pudo generar la respuesta.")
+      }
+      
+    } catch (error) {
+      setError("Error al generar respuesta");
+    }finally{
+      setLoading(false);
+    }
+
   };
 
   return (
