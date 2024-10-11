@@ -1,10 +1,15 @@
 from typing import List
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, File, HTTPException, Depends, UploadFile
+from pydantic import BaseModel
 from core.models import *
 from adapters.mongodb_adapter import MongoDBAdapter
+from usecases import files_usecases
+from usecases.files_usecases import RAGService
 from usecases.registration_use_case import RegistrationUseCase
 from usecases.login_use_case import LoginUseCase
 from usecases.user_crud_use_case import UserCrudCase
+
+from api import dependencies
 
 # Repositorio de MongoDB
 repo = MongoDBAdapter()
@@ -62,3 +67,40 @@ async def delete_user(id: int, use_case: UserCrudCase = Depends(lambda: UserCrud
 async def get_roles():
     roles = repo.get_roles()
     return roles
+
+
+
+class DocumentInput(BaseModel):
+    content: str = pydantic.Field(..., min_length=1)
+
+@router.get("/generate-answer", status_code=201)
+def generate_answer(query: str,
+        rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    return rag_service.generate_answer(query)
+
+
+
+@router.get("/get-document")
+def get_document(document_id: str,
+        rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    document = rag_service.get_document(document_id)
+    if document:
+        return document
+    return {"status": "Document not found"}
+
+@router.get("/get-vectors", status_code=201)
+def get_vectors(rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    return rag_service.get_vectors()
+
+
+
+
+
+
+@router.post("/save-document", status_code=201)
+async def save_doc(file: UploadFile = File(...)):
+    file_path = files_usecases._save_file_to_disk(file)
+    if file_path:
+        return {"status": "success", "message": "File uploaded successfully", "file_path": file_path}
+    else:
+        return {"status": "error", "message": "Failed to upload file"}

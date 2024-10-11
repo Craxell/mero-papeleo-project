@@ -4,9 +4,12 @@ from typing import List, Dict
 
 
 class MongoDBAdapter:
-    def __init__(self):
-        self.mongo_client = pymongo.MongoClient(settings.MONGO_URI)
-        self.db_mongo = self.mongo_client[settings.MONGO_DB_NAME]
+    def __init__(self, uri=None, database=None, users_collection=None, documents_collection=None):
+        self.mongo_client = pymongo.MongoClient(uri or settings.MONGO_URI)
+        self.db_mongo = self.mongo_client[database or settings.MONGO_DB_NAME]
+        self.users_collection = users_collection or "users"
+        self.documents_collection = documents_collection or "documents"
+
 
     def get_database(self):
         """Devuelve la base de datos MongoDB."""

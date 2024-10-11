@@ -16,23 +16,6 @@ class DocumentRepositoryPort(ABC):
         pass
 
 
-class MongoDBRepositoryPort(ABC):
-    @abstractmethod
-    def save_user(self, user: models.User) -> None:
-        pass
-
-    @abstractmethod
-    def get_user(self, email: str, password: str) -> models.User:
-        pass
-
-    @abstractmethod
-    def save_document(self, document: models.Document) -> None:
-        pass
-
-    @abstractmethod
-    def get_document(self, document_id: str) -> models.Document | None:
-        pass
-
 
 class LlmPort(ABC):
     @abstractmethod

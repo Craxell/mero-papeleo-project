@@ -1,44 +1,54 @@
 .prompt-custom {
-    margin-left: 20px;
-    margin-top: 20px;
-    width: 195%;
+    margin: 20px auto; /* Centra el contenedor horizontalmente */
+    width: 90%; /* Ajusta el ancho del contenedor para ser flexible */
+    max-width: 1200px; /* Evita que se extienda demasiado en pantallas grandes */
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.prompt-title-custom{
-    color: var(--colorCustom2);
-    font-size: 400%;
+    align-items: center; /* Centra los elementos dentro del contenedor */
+    justify-content: center; /* Asegura que se centre verticalmente si hay espacio adicional */
 }
 
 .chat-prompt {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Alinea todos los elementos al centro */
     margin-top: 20px;
-    border: 3px dotted var(--colorCustom);
     border-radius: 10px;
-    width: 75%;
+    width: 100%; /* Ocupa todo el ancho del contenedor padre */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 10px;
-}
-.contenido-prompt {
-    width: 85%;
-    justify-content: center;
-    align-self: center;
+    padding: 20px; /* Agrega un poco de espacio interno */
+    background-color: white; /* Fondo blanco para mejor contraste */
 }
 
-.split-prompt {
-    width: 90%;
-    justify-content: center;
-    align-self: center;
+.prompt-title-custom {
+    color: var(--colorCustom2);
+    font-size: 2.5rem; /* Ajuste de tamaño */
+    text-align: center; /* Asegura que el título esté centrado */
+}
+
+.contenido-prompt {
+    width: 85%; /* Mantiene el contenido centrado */
+    text-align: center; /* Centra el texto dentro del contenido */
+    margin-bottom: 20px; /* Espacio entre elementos */
 }
 
 .div-prompt {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centra los elementos dentro de este div */
+    flex-direction: column; /* Cambia la dirección de los elementos para apilarlos */
+    align-items: center; /* Alinea los elementos al centro */
+    width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.input-prompt {
+    width: 90%; /* Usando porcentaje para flexibilidad */
+    max-width: 600px; /* Ajusta el ancho máximo */
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px; /* Agrega espacio interno para mejor apariencia */
+    border: 1px solid #ccc; /* Bordes más definidos */
+    border-radius: 5px; /* Bordes redondeados */
 }
 
 .button-file {
@@ -46,17 +56,14 @@
     color: white;
     border: none;
     border-radius: 5px;
-    width: 4%;
+    width: 40px; /* Ajusta el tamaño */
     height: 38px;
-    margin-top: 10px;
-    margin: auto 0;
+    margin: 10px 0; /* Espaciado entre botones */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
 
 .button-file:hover {
     background-color: var(--colorCustom3);
@@ -67,8 +74,19 @@
     height: 20px;
 }
 
-.input-prompt{
-    width: 1000px;
-    margin: 20px 0 ;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);    
+.response-list {
+    width: 85%; /* Asegura que la lista de respuestas esté centrada */
+    margin: 20px 0; /* Espacio entre respuestas */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .input-prompt {
+        width: 100%; /* El ancho ocupará todo el espacio disponible */
+    }
+
+    .chat-prompt {
+        width: 100%; /* Ajuste para pantallas pequeñas */
+    }
 }

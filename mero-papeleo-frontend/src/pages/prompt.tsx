@@ -1,61 +1,126 @@
-import React, { useState } from 'react';
-import { generateAnswerRequest } from '../assets/ts/functions_Prompt';
+import { Form, Image, Button } from "react-bootstrap";
+import "../assets/css/Prompt.css";
+import upload from "../assets/images/upload.png";
+import { uploadDocumentRequest } from "../assets/ts/functions_Prompt";
+import { useState } from "react";
 
 const Prompt: React.FC = () => {
-
   interface Response {
     question: string;
     answer: any;
   }
-  
+
   const [responses, setResponses] = useState<Response[]>([]);
-  
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  // Manejar la selección de archivo
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
-  const handleAskQuestion = async () => {
-    if (question.trim() === "") return;
+  // Función para manejar la carga de archivos
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setError("Por favor, selecciona un archivo para subir.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
     setLoading(true);
     setError(null);
 
     try {
-        const res = await generateAnswerRequest(question);
-
-        if (res) {
-            setResponses([...responses, { question, answer: res }]);
-        } else {
-            setError("Error generating response. Please try again.");
-        }
-
-        setQuestion(""); // Limpiar el campo de pregunta
+      await uploadDocumentRequest(formData); // Sin 'id' aquí
+      setSelectedFile(null);
     } catch (err) {
-        setError("Error generating response. Please try again.");
+      setError("Error al subir el archivo. Por favor, inténtalo de nuevo.");
+      console.error(err);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
+  const handleAskQuestion = async () => {
+    // Implementa la lógica aquí
+  };
 
   return (
-    <><div className="content">
-
+    <div className="content">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6 p-2">
-            <div className="jumbotron rounded-0">
-              <h1 className="display-4">Prompt</h1>
-              <p className="lead">Pagina de prompt.</p>
-              <hr className="my-4" />
-              <p>Un texto de ejemplo: Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, voluptatem ea similique ratione vero mollitia accusantium! Eius amet minus dolorum sint odio ut ipsam temporibus necessitatibus blanditiis quidem, iusto doloremque!</p>
-              <a href="#" className="btn btn-primary btn-lg rounded-0">Learn More</a>
+            <div className="prompt-custom">
+              <div className="chat-prompt">
+                <h1 className="prompt-title-custom">Prompt</h1>
+                <hr className="my-4 split-prompt" />
+                <p className="contenido-prompt">
+                  Un texto de ejemplo: Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                </p>
+                <hr className="my-4 split-prompt" />
+
+                <div className="div-prompt">
+                  <Form.Control
+                    className="input-prompt"
+                    type="text"
+                    placeholder="Inserta tu Prompt"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                  />
+                  <Button
+                    className="btn-prompt"
+                    onClick={handleAskQuestion}
+                    disabled={loading}
+                  >
+                    {loading ? "Generando..." : "Enviar"}
+                  </Button>
+
+                  {/* Selector de archivo */}
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                    id="file-upload"
+                  />
+                  <Button
+                    className="button-file"
+                    onClick={() => document.getElementById("file-upload")?.click()}
+                  >
+                    <Image className="imageUpload" src={upload} />
+                  </Button>
+
+                  {selectedFile && (
+                    <>
+                      <p>Archivo seleccionado: {selectedFile.name}</p>
+                      <Button className="btn-upload" onClick={handleFileUpload} disabled={loading}>
+                        {loading ? "Subiendo..." : "Subir archivo"}
+                      </Button>
+                    </>
+                  )}
+                  {error && <p className="error-message">{error}</p>}
+                </div>
+
+                {/* Listado de preguntas y respuestas */}
+                <div className="response-list">
+                  {responses.map((response, index) => (
+                    <div key={index} className="response-item">
+                      <strong>Pregunta:</strong> {response.question} <br />
+                      <strong>Respuesta:</strong> {response.answer}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div></>
+    </div>
   );
 };
 

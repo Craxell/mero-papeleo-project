@@ -5,6 +5,8 @@ import { BaseUrl } from './BaseUrl';
 interface LoginResponse {
     token: string;
     username: string;
+    email_user: string;
+    id: number;
     message: string;
 }
 
@@ -20,6 +22,8 @@ interface AuthContextType {
     register: (username: string, email: string, password: string) => Promise<RegisterResponse>;
     token: string | null;
     username: string | null;
+    email_user: string | null;
+    id: number | null;
     role: string | null;
 }
 
@@ -27,13 +31,15 @@ interface AuthProviderProps {
     children: React.ReactNode;
 }
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthContextType>( {
     isAuthenticated: false,
-    login: async () => Promise.resolve({ token: '', username: '', message: '' }),
+    login: async () => Promise.resolve({ token: '', username: '', email_user: '', id: 0, message: '' }),
     logout: () => {},
     register: async () => Promise.resolve({ success: false, message: '' }),
     token: null,
     username: null,
+    email_user: null,
+    id: null,
     role: null,
 });
 
@@ -41,16 +47,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
-    const [role, setRole] = useState<string | null >(null);
+    const [email_user, setEmail_user] = useState<string | null>(null);
+    const [id, setId] = useState<number | null>(null);
+    const [role, setRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedToken = sessionStorage.getItem('token');
         const storedUsername = sessionStorage.getItem('username');
-        const storedRole = sessionStorage.getItem("role")
+        const storedRole = sessionStorage.getItem("role");
+        const storedEmail_user = sessionStorage.getItem("email_user");
+        const storedId = sessionStorage.getItem("id");
+
         if (storedToken && storedUsername) {
             setToken(storedToken);
             setUsername(storedUsername);
+            setEmail_user(storedEmail_user);
+            setId(storedId ? Number(storedId) : null);
             setRole(storedRole);
             setIsAuthenticated(true);
         }
@@ -61,13 +74,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             const response = await axios.post(`${BaseUrl}/login`, { username, password });
             if (response.data.status === 'success') {
-                // const newToken = response.data.access_token;
-                const {access_token, role} = response.data;
+                const { access_token, role, username, email, id } = response.data;
                 setToken(access_token);
                 setUsername(username);
                 setRole(role);
+                setEmail_user(email);
+                setId(id);
                 sessionStorage.setItem('token', access_token);
                 sessionStorage.setItem('username', username);
+                sessionStorage.setItem('email_user', email);
+                sessionStorage.setItem('id', String(id));
                 sessionStorage.setItem('role', role);
                 setIsAuthenticated(true);
                 return response.data; 
@@ -79,8 +95,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setIsAuthenticated(false);
             setToken(null);
             setUsername(null);
+            setEmail_user(null);
+            setId(null);
+            setRole(null);
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('username');
+            sessionStorage.removeItem('email_user');
+            sessionStorage.removeItem('id');
             sessionStorage.removeItem('role');
             throw error;
         }
@@ -90,9 +111,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(false);
         setToken(null);
         setUsername(null);
+        setEmail_user(null);
+        setId(null);
         setRole(null);
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('username');
+        sessionStorage.removeItem('email_user');
+        sessionStorage.removeItem('id');
         sessionStorage.removeItem('role');
     };
 
@@ -100,11 +125,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             const response = await axios.post(`${BaseUrl}/register`, { username, email, password });
             if (response.data.status === 'success') {
-                return response.data.message;
-            } else if (response.data.message) {
-                throw new Error(response.data.message);
+                return { success: true, message: response.data.message }; // Ajustado para que coincida con `RegisterResponse`
             } else {
-                throw new Error('Error inesperado al registrar.');
+                throw new Error(response.data.message || 'Error inesperado al registrar.');
             }
         } catch (error) {
             console.error('Error in registration:', error);
@@ -139,6 +162,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             token, 
             username,
             role,
+            email_user,
+            id
         }}>
             {children}
         </AuthContext.Provider>

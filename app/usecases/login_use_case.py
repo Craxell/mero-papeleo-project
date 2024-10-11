@@ -64,13 +64,17 @@ class LoginUseCase:
             }
         
         role = user.get("role", "user")
+        email = user.get("email", "user")
+        id = user.get("id", "user")
         access_token = self.create_access_token(data={"sub": user["username"], "username": user["username"], "role": role})
         logger.info(f"Inicio de sesión exitoso para el usuario: {username}")
         return {
             "status": "success",
             "username": username,
+            "email": email,
             "message": f"Bienvenido {username}",
             "access_token": access_token,
             "role": role,
+            "id": id,
             "token_type": "bearer"
         }

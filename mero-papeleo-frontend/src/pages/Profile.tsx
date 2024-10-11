@@ -3,7 +3,8 @@ import "../assets/css/Profile.css";
 import { useAuth } from "../auth/AuthContext";
 
 const Profile: React.FC = () => {
-  const { username } = useAuth();
+  const { username, email_user, role } = useAuth();
+
 
   return (
     <>
@@ -17,12 +18,15 @@ const Profile: React.FC = () => {
                 <div className="profile-info">
                   <div className="profile-info-item">
                     <h5>Nombre de Usuario: {username}</h5>
-                    <p></p>
                   </div>
                   <div className="profile-info-item">
-                    <h5>Correo: </h5>
-                    </div>
+                    <h5>Correo: {email_user}</h5>
                   </div>
+                  </div>
+                  <div className="profile-info-item">
+                    <h5>Rol: {role}</h5>
+                  </div>
+                  
                 <hr className="my-4 split-profile" />
               </div>
             </div>
