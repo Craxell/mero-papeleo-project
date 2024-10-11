@@ -1,6 +1,7 @@
 import pymongo
 from app.configurations import settings
 from typing import List, Dict
+from core.models import Document
 
 
 class MongoDBAdapter:
@@ -54,3 +55,20 @@ class MongoDBAdapter:
     def get_roles(self) -> List[Dict[str, str]]:
         """Obtiene todos los roles sin los campos _id."""
         return list(self.db_mongo["roles"].find({}, {"_id": 0, "name": 1}))
+
+
+    def save_document(self, document: Document) -> None:
+        """Guarda un documento en la colección de documentos."""
+        self.insert_one(self.documents_collection, {
+            "id": document.id,
+            "title": document.title,
+            "path": document.path,
+            "content": document.content
+        })
+
+    def get_document(self, id: str) -> Document | None:
+        """Recupera un documento por ID."""
+        document = self.find_one(self.documents_collection, {"id": id})
+        if document:
+            return Document(id=document["id"], title=document["title"], path=document["path"], content=document["content"])
+        return None

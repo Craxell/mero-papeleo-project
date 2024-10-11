@@ -3,11 +3,12 @@ from fastapi import APIRouter, File, HTTPException, Depends, UploadFile
 from pydantic import BaseModel
 from core.models import *
 from adapters.mongodb_adapter import MongoDBAdapter
-from usecases import files_usecases
-from usecases.files_usecases import RAGService
 from usecases.registration_use_case import RegistrationUseCase
 from usecases.login_use_case import LoginUseCase
 from usecases.user_crud_use_case import UserCrudCase
+
+from usecases import files_usecases
+
 
 from api import dependencies
 
@@ -45,8 +46,8 @@ async def update_user(id: int, user_data: UpdateUserRequest, use_case: UserCrudC
     except HTTPException as http_err:
         raise http_err
     except Exception as e:
-        print(f"Error al actualizar el usuario: {e}")  # Asegúrate de que se imprima el error
-        raise HTTPException(status_code=500, detail=str(e))  # Incluye el mensaje de error en la respuesta
+        print(f"Error al actualizar el usuario: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 
@@ -73,34 +74,26 @@ async def get_roles():
 class DocumentInput(BaseModel):
     content: str = pydantic.Field(..., min_length=1)
 
-@router.get("/generate-answer", status_code=201)
-def generate_answer(query: str,
-        rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    return rag_service.generate_answer(query)
 
-
+@router.post("/save-document", status_code=201)
+def save_document(file: UploadFile = File(...),rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    return rag_service.save_document(file)
 
 @router.get("/get-document")
-def get_document(document_id: str,
-        rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+def get_document(document_id: str, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
     document = rag_service.get_document(document_id)
     if document:
         return document
-    return {"status": "Document not found"}
+    raise HTTPException(status_code=404, detail="Document not found")
+
+
 
 @router.get("/get-vectors", status_code=201)
-def get_vectors(rag_service: RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
     return rag_service.get_vectors()
 
 
-
-
-
-
-@router.post("/save-document", status_code=201)
-async def save_doc(file: UploadFile = File(...)):
-    file_path = files_usecases._save_file_to_disk(file)
-    if file_path:
-        return {"status": "success", "message": "File uploaded successfully", "file_path": file_path}
-    else:
-        return {"status": "error", "message": "Failed to upload file"}
+@router.get("/generate-answer", status_code=201)
+def generate_answer(query: str,
+        rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    return rag_service.generate_answer(query)

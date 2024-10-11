@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
                   ut ipsam temporibus necessitatibus blanditiis quidem, iusto
                   doloremque!
                   {<br />}
-                  {<br />} 
+                  {<br />}
                   Un texto de ejemplo: Lorem ipsum dolor sit amet consectetur
                   adipisicing elit. Delectus, voluptatem ea similique ratione
                   vero mollitia accusantium! Eius amet minus dolorum sint odio

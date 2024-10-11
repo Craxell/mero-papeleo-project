@@ -1,10 +1,9 @@
-from core import ports
 from core.models import Document
-from core.ports import *
 from adapters import mongodb_adapter
+from core import ports
 from utils.strategies import FileReader
 import os
-from fastapi import UploadFile
+from fastapi import UploadFile, HTTPException
 
 
 class RAGService:
@@ -15,35 +14,47 @@ class RAGService:
 
     # RAG methods
     def generate_answer(self, query: str) -> str:
-        """Genera una respuesta basada en una consulta usando documentos recuperados."""
         documents = self.document_repo.get_documents(query, self.openai_adapter)
         print(f"Documents: {documents}")
         context = " ".join([doc.content for doc in documents])
         return self.openai_adapter.generate_text(prompt=query, retrieval_context=context)
 
+    def save_document(self, file: UploadFile) -> dict:
+        """Guarda el archivo en el sistema de archivos y en la base de datos."""
+        file_name = file.filename
 
-    def _save_file_to_disk(self, file: UploadFile) -> str:
-        """Guarda el archivo en el disco y devuelve la ruta del archivo guardado."""
-        os.makedirs('userfiles', exist_ok=True)
-        file_path = os.path.join('userfiles', file.filename)
+        os.makedirs('userdata', exist_ok=True)
 
+        file_path = os.path.join('userdata', file_name)
         try:
             with open(file_path, 'wb') as f:
                 f.write(file.file.read())
-            return file_path
         except Exception as e:
-            print(f"Failed to save file: {str(e)}")
-            return ""
+            raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
 
-    def _read_file_content(self, file_path: str) -> str:
-        """Lee el contenido del archivo y devuelve el contenido o un mensaje de error."""
-        content = FileReader(file_path).read_file()
-        return content
+        document = Document(title=file_name, path=file_path)
 
-    def get_document(self, id: str) -> Document:
+        # strategies
+        try:
+            content = FileReader(document.path).read_file()
+            if isinstance(content, str) and (content.startswith("File not found") or content.startswith("An error occurred")):
+                return {"status": content}  # Devolver mensaje de error específico
+
+            self.mongo_repo.save_document(document)
+            self.document_repo.save_document(document, content, self.openai_adapter)
+
+            return {"status": "Document saved successfully"}
+
+        except ValueError as ve:
+            return {"status": str(ve)}
+        except Exception as e:
+            return {"status": str(e)}
+
+
+
+    def get_document(self, id: str) -> Document | None:
         """Recupera un documento de la base de datos."""
-        return self.mongo_repo.get_document(id)
-
-    def get_vectors(self):
-        """Recupera los vectores de documentos."""
-        return self.document_repo.get_vectors()
+        document = self.mongo_repo.get_document(id)
+        if document:
+            return document
+        return None  # Esto devuelve None si no encuentra el documento
