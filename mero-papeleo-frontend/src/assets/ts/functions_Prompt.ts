@@ -3,10 +3,8 @@ import { BaseUrl } from "../../auth/BaseUrl";
 
 export const generateAnswerRequest = async (question: string): Promise<string | null> => {
     try {
-        const res = await axios.get(`${BaseUrl}/generate-answer`, {
-            params: {
-                query: question,
-            },
+        const res = await axios.post(`${BaseUrl}/generate-answer`, {
+            query: question, // Enviar 'query' directamente
         });
 
         if (res.status === 201 && res.data) {
@@ -20,6 +18,7 @@ export const generateAnswerRequest = async (question: string): Promise<string | 
         return null;
     }
 };
+
 
 export const uploadDocumentRequest = async (formData: FormData) => {
     try {

@@ -12,6 +12,7 @@ class Document(pydantic.BaseModel):
     title: Optional[str] = None
     path: Optional[str] = None
     content: Optional[str] = None
+    embedding: list = []
 
 
 #Backend_MongoDB_Users

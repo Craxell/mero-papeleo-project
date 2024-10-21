@@ -7,7 +7,7 @@ import { useState } from "react";
 const Prompt: React.FC = () => {
   interface Response {
     question: string;
-    answer: any;
+    answer: string; // Cambié `any` a `string` para mayor claridad
   }
 
   const [responses, setResponses] = useState<Response[]>([]);
@@ -48,8 +48,7 @@ const Prompt: React.FC = () => {
   };
 
   const handleAskQuestion = async () => {
-
-    if(!question){
+    if (!question) {
       setError("Por favor, ingresa una pregunta.");
       return;
     }
@@ -59,19 +58,17 @@ const Prompt: React.FC = () => {
 
     try {
       const answer = await generateAnswerRequest(question);
-      if(answer){
-        setResponses([...responses, {question, answer}]);
-        setQuestion("");
-      }else{
-        setError("No se pudo generar la respuesta.")
+      if (answer) {
+        setResponses((prevResponses) => [...prevResponses, { question, answer }]);
+        setQuestion(""); // Limpiar el campo de entrada
+      } else {
+        setError("No se pudo generar la respuesta.");
       }
-      
     } catch (error) {
-      setError("Error al generar respuesta");
-    }finally{
+      setError("Error al generar respuesta.");
+    } finally {
       setLoading(false);
     }
-
   };
 
   return (
@@ -134,7 +131,7 @@ const Prompt: React.FC = () => {
                   {responses.map((response, index) => (
                     <div key={index} className="response-item">
                       <strong>Pregunta:</strong> {response.question} <br />
-                      <strong>Respuesta:</strong> {response.answer}
+                      <strong>Respuesta:</strong> {response.answer} {/* Asegúrate de que esto es lo que quieres mostrar */}
                     </div>
                   ))}
                 </div>

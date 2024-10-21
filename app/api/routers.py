@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import APIRouter, File, HTTPException, Depends, UploadFile
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from core import models
 from core.models import *
 from adapters.mongodb_adapter import MongoDBAdapter
 from usecases.registration_use_case import RegistrationUseCase
@@ -71,29 +72,67 @@ async def get_roles():
 
 
 
-class DocumentInput(BaseModel):
-    content: str = pydantic.Field(..., min_length=1)
+# @router.post("/save-document", status_code=201)
+# def save_document(file: UploadFile = File(...),rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+#     return rag_service.save_document(file)
 
+# @router.get("/get-document")
+# def get_document(document_id: str, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+#     document = rag_service.get_document(document_id)
+#     if document:
+#         return document
+#     raise HTTPException(status_code=404, detail="Document not found")
+
+
+
+# @router.get("/get-vectors", status_code=201)
+# def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+#     return rag_service.get_vectors()
+
+
+# class QueryRequest(BaseModel):
+#     query: str
+
+# @router.post("/generate-answer", status_code=201)
+# async def generate_answer(request: QueryRequest, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+#     answer = rag_service.generate_answer(request.query)  # Usamos request.query aquí
+#     return {"answer": answer}
+
+
+
+
+
+class DocumentInput(BaseModel):
+    content: str = Field(..., min_length=1)
 
 @router.post("/save-document", status_code=201)
-def save_document(file: UploadFile = File(...),rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+def save_document(file: UploadFile = File(...), rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
     return rag_service.save_document(file)
 
-@router.get("/get-document")
+@router.get("/get-document/{document_id}", response_model=models.Document)  # Especifica el modelo de respuesta
 def get_document(document_id: str, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    document = rag_service.get_document(document_id)
+    document = rag_service.mongo_repo.get_document(document_id)  # Asegúrate de que tu repositorio tenga este método
     if document:
         return document
     raise HTTPException(status_code=404, detail="Document not found")
 
+# @router.get("/get-vectors", status_code=200)  # Cambié el código de estado a 200 para el éxito
+# def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+#     return rag_service.get_vectors()
+
+class QueryRequest(BaseModel):
+    query: str
+
+@router.post("/generate-answer", status_code=201)
+async def generate_answer(request: QueryRequest, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    answer = rag_service.generate_answer(request.query)  # Usamos request.query aquí
+    return {"answer": answer}
 
 
-@router.get("/get-vectors", status_code=201)
-def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    return rag_service.get_vectors()
 
-
-@router.get("/generate-answer", status_code=201)
-def generate_answer(query: str,
-        rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    return rag_service.generate_answer(query)
+@router.get("/get-embeddings", response_model=dict, status_code=200)
+def get_embeddings(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    """
+    Obtiene todos los embeddings almacenados en ChromaDB.
+    """
+    return rag_service.document_repo.get_vectors() 
