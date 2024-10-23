@@ -1,24 +1,36 @@
 from typing import List
 from fastapi import APIRouter, File, HTTPException, Depends, UploadFile
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+
+
 from core import models
 from core.models import *
 from adapters.mongodb_adapter import MongoDBAdapter
+
+from app.configurations import settings
+
+
 from usecases.registration_use_case import RegistrationUseCase
 from usecases.login_use_case import LoginUseCase
 from usecases.user_crud_use_case import UserCrudCase
-
-from usecases import files_usecases
+from usecases import RAG_Usecases
 
 
 from api import dependencies
 
 # Repositorio de MongoDB
-repo = MongoDBAdapter()
+repo = MongoDBAdapter(
+    str(settings.MONGO_URI),
+    str(settings.MONGO_DB_NAME),
+    str(settings.MONGO_COLLECTION_USERS),
+    str(settings.MONGO_COLLECTION_DOCUMENTS)
+)
+
 router = APIRouter()
 
 @router.post("/register")
-async def register(user_data: UserCreate, use_case: RegistrationUseCase = Depends(lambda: RegistrationUseCase(repo))):
+async def register(user_data: UserCreate, use_case: RegistrationUseCase = Depends(lambda: RegistrationUseCase(repo) )):
     try:
         return use_case.register(user_data)
     except ValueError as e:
@@ -71,68 +83,29 @@ async def get_roles():
     return roles
 
 
-
-# @router.post("/save-document", status_code=201)
-# def save_document(file: UploadFile = File(...),rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-#     return rag_service.save_document(file)
-
-# @router.get("/get-document")
-# def get_document(document_id: str, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-#     document = rag_service.get_document(document_id)
-#     if document:
-#         return document
-#     raise HTTPException(status_code=404, detail="Document not found")
-
-
-
-# @router.get("/get-vectors", status_code=201)
-# def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-#     return rag_service.get_vectors()
-
-
-# class QueryRequest(BaseModel):
-#     query: str
-
-# @router.post("/generate-answer", status_code=201)
-# async def generate_answer(request: QueryRequest, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-#     answer = rag_service.generate_answer(request.query)  # Usamos request.query aquí
-#     return {"answer": answer}
-
-
-
-
-
 class DocumentInput(BaseModel):
-    content: str = Field(..., min_length=1)
+    content: str
+
+@router.get("/generate-answer", status_code=201)
+def generate_answer(
+    query: str,rag_service: RAG_Usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    answer = rag_service.generate_answer(query)
+    return JSONResponse(content={"answer": answer})
+
 
 @router.post("/save-document", status_code=201)
-def save_document(file: UploadFile = File(...), rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+def save_document(file: UploadFile = File(...),
+        rag_service: RAG_Usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
     return rag_service.save_document(file)
 
-@router.get("/get-document/{document_id}", response_model=models.Document)  # Especifica el modelo de respuesta
-def get_document(document_id: str, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    document = rag_service.mongo_repo.get_document(document_id)  # Asegúrate de que tu repositorio tenga este método
+@router.get("/get-document")
+def get_document(document_id: str,
+        rag_service: RAG_Usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    document = rag_service.get_document(document_id)
     if document:
         return document
-    raise HTTPException(status_code=404, detail="Document not found")
+    return {"status": "Document not found"}
 
-# @router.get("/get-vectors", status_code=200)  # Cambié el código de estado a 200 para el éxito
-# def get_vectors(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-#     return rag_service.get_vectors()
-
-class QueryRequest(BaseModel):
-    query: str
-
-@router.post("/generate-answer", status_code=201)
-async def generate_answer(request: QueryRequest, rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    answer = rag_service.generate_answer(request.query)  # Usamos request.query aquí
-    return {"answer": answer}
-
-
-
-@router.get("/get-embeddings", response_model=dict, status_code=200)
-def get_embeddings(rag_service: files_usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
-    """
-    Obtiene todos los embeddings almacenados en ChromaDB.
-    """
-    return rag_service.document_repo.get_vectors() 
+@router.get("/get-vectors", status_code=201)
+def get_vectors(rag_service: RAG_Usecases.RAGService = Depends(dependencies.RAGServiceSingleton.get_instance)):
+    return rag_service.get_vectors()

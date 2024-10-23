@@ -15,6 +15,15 @@ class DocumentRepositoryPort(ABC):
     def get_vectors(self):
         pass
 
+class MongoDBRepositoryPort(ABC):
+    @abstractmethod
+    def save_document(self, document: models.Document) -> None:
+        pass
+
+    @abstractmethod
+    def get_document(self, document_id: str) -> models.Document | None:
+        pass
+
 
 class LlmPort(ABC):
     @abstractmethod

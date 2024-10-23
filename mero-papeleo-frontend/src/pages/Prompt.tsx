@@ -7,13 +7,14 @@ import { useState } from "react";
 const Prompt: React.FC = () => {
   interface Response {
     question: string;
-    answer: string; // Cambié `any` a `string` para mayor claridad
+    answer: string; // Mantener como string para claridad
   }
 
   const [responses, setResponses] = useState<Response[]>([]);
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Manejar la selección de archivo
@@ -35,9 +36,11 @@ const Prompt: React.FC = () => {
 
     setLoading(true);
     setError(null);
- 
+    setSuccessMessage(null);
+
     try {
       await uploadDocumentRequest(formData);
+      setSuccessMessage("Archivo subido exitosamente.");
       setSelectedFile(null);
     } catch (err) {
       setError("Error al subir el archivo. Por favor, inténtalo de nuevo.");
@@ -124,6 +127,7 @@ const Prompt: React.FC = () => {
                     </>
                   )}
                   {error && <p className="error-message">{error}</p>}
+                  {successMessage && <p className="success-message">{successMessage}</p>}
                 </div>
 
                 {/* Listado de preguntas y respuestas */}
@@ -131,7 +135,7 @@ const Prompt: React.FC = () => {
                   {responses.map((response, index) => (
                     <div key={index} className="response-item">
                       <strong>Pregunta:</strong> {response.question} <br />
-                      <strong>Respuesta:</strong> {response.answer} {/* Asegúrate de que esto es lo que quieres mostrar */}
+                      <strong>Respuesta:</strong> {response.answer}
                     </div>
                   ))}
                 </div>

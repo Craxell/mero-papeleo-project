@@ -88,3 +88,4 @@ class FileReader:
     def read_file(self):
         return self.manager.read()
 
+

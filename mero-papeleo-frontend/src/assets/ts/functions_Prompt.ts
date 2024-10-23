@@ -3,12 +3,14 @@ import { BaseUrl } from "../../auth/BaseUrl";
 
 export const generateAnswerRequest = async (question: string): Promise<string | null> => {
     try {
-        const res = await axios.post(`${BaseUrl}/generate-answer`, {
-            query: question, // Enviar 'query' directamente
+        const res = await axios.get(`${BaseUrl}/generate-answer`, {
+            params: { query: question }, // Cambié 'query' a 'params'
         });
 
-        if (res.status === 201 && res.data) {
-            return res.data.answer;
+        console.log("Respuesta del servidor:", res.data); // Para verificar la respuesta
+
+        if (res.status === 200 && res.data.answer) {
+            return res.data.answer; // Accede a 'answer' desde 'data'
         } else {
             console.error("Unexpected response format", res);
             return null;

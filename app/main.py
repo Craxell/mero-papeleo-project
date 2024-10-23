@@ -27,6 +27,9 @@ app.add_middleware(
 
 app.include_router(router)
 
+
+
+
 # Si el archivo es ejecutado directamente, iniciar Uvicorn
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host=settings.APP_HOST, port=settings.APP_PORT, reload=True)
