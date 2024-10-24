@@ -1,103 +1,146 @@
 .landing-page {
-  text-align: center;
-  padding: 40px;
-  background-color: #f9f9f9;
-  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.title_lanPage{
-  background:var(--colorCustom);
-  color: rgb(255, 255, 255);
-  h1{font-size: 500%};
-  font-family: "Niconne", cursive;
-  font-weight: 400;
-  font-style: normal;
-  width: 100%;
-}
-
-.landing-header {
+.title_lanPage {
+  background-color: var(--colorCustom);
+  color: var(--blanco);
+  border: none;
+  padding: 40px 20px;
+  border-radius: 10px;
   margin-bottom: 40px;
-}
-
-.landing-header h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .tagline {
+  color: var(--blanco);
+}
+
+.title_lanPage::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  top: -150px;
+  left: -50%;
+}
+
+.landing-header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.landing-header .tagline {
   font-size: 1.3rem;
-  font-family: Andale Mono, monospace;
-  color: #f3f3f3;
-  margin-bottom: 20px;
-}
-
-.auth-section {
-  font-family: Andale Mono, monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.card_auth{
-  background:#fdfdff;
-  width: 25%;
-  margin: 40px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.features {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.feature {
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 30%;
-  margin: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.feature:hover {
-  transform: translateY(-5px); 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.feature h3 {
-  margin-top: 0;
-  color: #333;
-}
-
-.feature p {
-  color: #555;
-  line-height: 1.5;
-}
-
-.landing-footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: #777;
+  font-weight: 300;
 }
 
 .button-login-custom {
-  background-color: var(--colorCustom);
-  color: white;
-  border: var(--colorCustom2) solid 4px;
-  padding: 10px 20px;
-  border-radius: 0 5px 0 5px;
-  cursor: pointer; 
-  transition: background-color 0.3s;
-  text-decoration: none; 
-  width: 10%;
-  align-self: end;
+  display: inline-block;
+  margin-top: 20px;
+  background-color: var(--colorCustom2);
+  color: var(--gris3);
+  padding: 10px 25px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
 }
 
 .button-login-custom:hover {
-  background-color: var(--colorCustom2);
+  background-color: var(--colorCustom3);
+  color: var(--gris3);
+  border-color: var(--blanco);
+  transform: translateY(-1px);
+  box-shadow: 0px 6px 20px var(--negro);
+}
+
+.text-custom {
+  font-size: 40px;
+  color: var(--colorCustom2);
+  text-align: center;
+}
+
+.feature-card {
+  background-color: var(--blanco);
+  border: none;
+  border-radius: 10px;
+  padding: 0px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px var(--negro);
+  height: 220px;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 6px 20px var(--negro);
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  top: -100px;
+  left: -50%;
+  background: var(--colorCustom10);
+  transform: rotate(45deg);
+}
+
+.feature-card h3 {
+  font-size: 1.6rem;
+  color: var(--colorCustom2);
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.feature-card p {
+  font-size: 1rem;
+  color: var(--colorCustom11);
+  line-height: 1.6;
+}
+
+.landing-footer {
+  background-color: var(--colorCustom);
+  color: var(--blanco);
+  padding: 20px 0;
+  text-align: center;
+}
+
+.landing-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--negro)
+}
+
+@media (max-width: 768px) {
+  .landing-header h1 {
+    font-size: 2rem;
+  }
+
+  .landing-header .tagline {
+    font-size: 1.1rem;
+  }
+
+  .features {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .feature-card h3 {
+    font-size: 1.4rem;
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+  }
 }

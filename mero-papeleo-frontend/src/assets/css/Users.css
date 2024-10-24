@@ -1,3 +1,118 @@
-.center-text {
-    text-align: center; /* Alinea el texto al centro */
+/* Asegura que el contenedor ocupe toda la altura de la ventana */
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    border-radius: 15px;
+}
+
+/* Contenedor principal */
+.container-fluid {
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 25px;
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--blanco);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px var(--negro);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border: 1px solid var(--gris2);
+}
+
+/* Título */
+.jumbotron .display-4 {
+    font-size: 2rem;
+    color: var(--colorCustom6);
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+    border-radius: 15px;
+}
+
+/* Tabla */
+.table {
+    width: 100%;
+    max-width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    text-align: center;
+    padding: 12px;
+}
+
+.table th {
+    background-color: var(--gris);
+    border-bottom: 2px solid var(--gris2);
+}
+
+.table td {
+    border-bottom: 1px solid var(--gris2);
+}
+/* Botones */
+.btn {
+    margin: 5px;
+}
+
+.btn-primary {
+    background-color: var(--colorCustom);
+    border-color: var(--colorCustom);
+}
+
+.btn-primary:hover {
+    background-color: var(--colorCustom2);
+    border-color: var(--colorCustom2);
+}
+
+.btn-success {
+    background-color: var(--colorCustom3);
+    border-color: var(--colorCustom3);
+}
+
+.btn-success:hover {
+    background-color: var(--colorCustom4);
+    border-color: var(--colorCustom4);
+}
+
+.btn-danger {
+    background-color: var(--primaryCustom1);
+    border-color: var(--primaryCustom1);
+}
+
+.btn-danger:hover {
+    background-color: var(--primaryCustom2);
+    border-color: var(--primaryCustom2);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 15px;
+    padding: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .jumbotron {
+        padding: 15px;
+    }
+
+    .table {
+        max-width: 100%;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
 }

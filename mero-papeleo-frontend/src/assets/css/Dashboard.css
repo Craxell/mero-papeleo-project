@@ -1,12 +1,85 @@
-.dashboard-custom {
-    margin-left: 20px;
-    margin-top: 20px;
-    width: 195%;
+/* Asegura que el contenedor ocupe toda la altura de la ventana */
+.content {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.dashboard-title-custom{
-    color: var(--colorCustom2);
-    font-size: 400%;
+/* Contenedor principal */
+.container-fluid {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Fila */
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+/* Columna */
+.col-lg-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 2px;
+}
+
+/* Estilo personalizado del dashboard */
+.dashboard-custom {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border: 1px solid #eaeaea;
+}
+
+/* Título del dashboard */
+.dashboard-title-custom {
+    font-size: 2rem;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Separador */
+.my-4 {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #eef2f5;
+    margin: 10px 0;
+}
+
+/* Párrafo */
+p {
+    font-size: 1rem;
+    color: #2c3e50;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .col-lg-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .dashboard-custom {
+        padding: 15px;
+    }
+
+    .dashboard-title-custom {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
 }

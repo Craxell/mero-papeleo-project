@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
                 <Link className="nav-link" to="/profile">Hola, {username}</Link>
               </li>
               <li className="nav-item">
-                <button className="nav-link btn btn-link" onClick={logout}>Cerrar sesión</button>
+                <button className="nav-link" onClick={logout}>Cerrar sesión</button>
               </li>
             </>
           )}

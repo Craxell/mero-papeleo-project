@@ -4,6 +4,7 @@
     height: 450px;
     perspective: 1000px;
     margin: auto;
+    margin-top: 20px;
 }
 
 .auth-button {
@@ -17,7 +18,8 @@
     margin: 10px;
     position: absolute;
     bottom: 15%;
-    left: 20%;
+    left: 22%;
+    width: 50%;
 }
 
 .auth-button2 {
@@ -30,7 +32,8 @@
     transition: background-color 0.3s;
     margin: 10px;
     position: absolute;
-    left: 25%;
+    left: 22%;
+    width: 50%;
 }
 
 .auth-button:hover {

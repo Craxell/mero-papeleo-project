@@ -1,60 +1,58 @@
 import React from "react";
-import { Card } from "react-bootstrap";
+import { Card, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../assets/css/LandingPage.css";
 
 const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
-      <Card className="title_lanPage">
-        <Link className="button-login-custom" to="/login">
-          Login
-        </Link>
-        <Card.Body>
-          <h1>Bienvenido a Mero Papeleo</h1>
-        </Card.Body>
-        <header className="landing-header">
-          <p className="tagline">La ayuda perfecta para tus articulos</p>
-        </header>
-        <h2>Características</h2>
-        <section className="features">
-          <div className="feature">
-            <h3>Fácil de usar</h3>
+      <Container fluid>
+        <Card className="title_lanPage">
+          <header className="landing-header py-4">
+            <h1>Bienvenido a Mero Papeleo</h1>
+            <p className="tagline">La ayuda perfecta para tus artículos</p>
+            <Link className="button-login-custom mt-3" to="/login">
+              Iniciar sesión
+            </Link>
+          </header>
+        </Card>
+
+        <h2 className="text-custom mt-5">Características</h2>
+        <Row className="text-center mt-4">
+          <Col md={4}>
+            <Card className="feature-card p-3 mb-4">
+            <h3>IA Avanzada para la Recuperación de Información</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Nuestro sistema RAG emplea tecnología de IA de última generación para
+              extraer la información más relevante de tus papers, tesis o informes,
+              brindándote respuestas precisas en cuestión de segundos.
             </p>
-          </div>
-          <div className="feature">
-            <h3>Acceso seguro</h3>
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card className="feature-card p-3 mb-4">
+            <h3>Optimización del Proceso de Investigación</h3>
             <p>
-              Curabitur pretium tincidunt lacus. Nulla gravida orci a odio, et
-              feugiat augue facilisis sit amet.
-              Curabitur pretium tincidunt lacus. Nulla gravida orci a odio, et
-              feugiat augue facilisis sit amet.
-              Curabitur pretium tincidunt lacus. Nulla gravida orci a odio, et
-              feugiat augue facilisis sit amet.
+              Simplifica tu flujo de trabajo académico o profesional. Nuestro sistema
+              organiza y resume tus documentos para que puedas concentrarte en lo más
+              importante: tu investigación.
             </p>
-          </div>
-          <div className="feature">
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card className="feature-card p-3 mb-4">
             <h3>Soporte 24/7</h3>
             <p>
-              Mauris vitae elit eget eros gravida eleifend sit amet ac sapien.
-              Quisque quis arcu ac lorem pretium malesuada.
-              Mauris vitae elit eget eros gravida eleifend sit amet ac sapien.
-              Quisque quis arcu ac lorem pretium malesuada.
-              Mauris vitae elit eget eros gravida eleifend sit amet ac sapien.
-              Quisque quis arcu ac lorem pretium malesuada.
+            Siempre estamos aquí para ayudarte. Nuestro equipo de soporte está disponible
+            las 24 horas, los 7 días de la semana, para resolver cualquier duda sobre el uso
+            del sistema o la extracción de información de tus documentos.
             </p>
-          </div>
-        </section>
-      </Card>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
 
-      <footer className="landing-footer">
+      <footer className="landing-footer text-custom py-3 mt-5">
         <p>© 2024 Mero Papeleo. Todos los derechos reservados.</p>
       </footer>
     </div>
