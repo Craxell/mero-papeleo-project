@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
-from adapters.mongodb_adapter import MongoDBAdapter
-from core.models import UserSchema
+from app.adapters.mongodb_adapter import MongoDBAdapter
+from app.core.models import UserSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
