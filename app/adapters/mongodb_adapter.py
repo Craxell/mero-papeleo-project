@@ -1,6 +1,6 @@
 from typing import List, Dict
-from core import ports
-from core.models import Document
+from app.core import ports
+from app.core.models import Document
 import pymongo as pyM
 
 class MongoDBAdapter(ports.MongoDBRepositoryPort):

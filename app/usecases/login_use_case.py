@@ -1,10 +1,10 @@
 from fastapi import HTTPException, status
-from core.models import Token
+# from core.models import Token
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from app.configurations import settings
-from adapters.mongodb_adapter import MongoDBAdapter
+from app.adapters.mongodb_adapter import MongoDBAdapter
 import logging
 
 # Configuración del logger

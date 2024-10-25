@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from core import models
+from app.core import models
 
 class DocumentRepositoryPort(ABC):
     @abstractmethod
