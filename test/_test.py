@@ -20,14 +20,71 @@ def mock_repo():
 
 @pytest.fixture
 def login_use_case_fixture(mock_repo):
-    return LoginUseCase(repo=mock_repo)  # Ensure this is a callable class or function
+    return LoginUseCase(repo=mock_repo)
 
-def test_validate_credentials_success(login_use_case_fixture):
-    # Caso donde username y password están presentes
-    login_use_case_fixture.validate_credentials(username="testuser", password="testpass")
-    # No se espera ninguna excepción, por lo que la prueba pasará si no hay errores.
+def test_login_success(login_use_case_fixture, mock_repo):
+    # Configurar el mock para un usuario válido
+    mock_repo.find_one.return_value = {
+        "username": "testuser",
+        "password": pwd_context.hash("testpass"),
+        "email": "testuser@example.com",
+        "role": "user",
+        "id": "user_id"
+    }
 
-def test_validate_credentials_fail(login_use_case_fixture):
-    # Caso donde username o password están vacíos
-    with pytest.raises(HTTPException):
-        login_use_case_fixture.validate_credentials(username="", password="testpass")
+    result = login_use_case_fixture.login("testuser", "testpass")
+    
+    assert result["status"] == "success"
+    assert result["username"] == "testuser"
+    assert result["email"] == "testuser@example.com"
+    assert result["role"] == "user"
+    assert "access_token" in result
+    assert result["token_type"] == "bearer"
+
+def test_login_fail_invalid_credentials(login_use_case_fixture, mock_repo):
+    # Configurar el mock para un usuario válido pero con una contraseña incorrecta
+    mock_repo.find_one.return_value = {
+        "username": "testuser",
+        "password": pwd_context.hash("testpass")
+    }
+
+    result = login_use_case_fixture.login("testuser", "wrongpass")
+    
+    assert result["status"] == "error"
+    assert result["message"] == "Credenciales inválidas"
+
+
+
+def test_authenticate_user_success(login_use_case_fixture, mock_repo):
+    # Configurar el mock para simular un usuario encontrado con la contraseña correcta
+    mock_repo.find_one.return_value = {
+        "username": "testuser",
+        "password": pwd_context.hash("testpass")  # Almacena la contraseña hasheada
+    }
+
+    user = login_use_case_fixture.authenticate_user("testuser", "testpass")
+    
+    assert user is not False
+    assert user["username"] == "testuser"
+
+def test_authenticate_user_fail_username_not_found(login_use_case_fixture, mock_repo):
+    # Configurar el mock para simular que no se encuentra el usuario
+    mock_repo.find_one.return_value = None
+    
+    result = login_use_case_fixture.authenticate_user("unknownuser", "testpass")
+    
+    assert result is False  # Debería retornar False
+
+def test_authenticate_user_fail_wrong_password(login_use_case_fixture, mock_repo):
+    # Configurar el mock para simular un usuario con contraseña incorrecta
+    mock_repo.find_one.return_value = {
+        "username": "testuser",
+        "password": pwd_context.hash("testpass")  # Almacena la contraseña hasheada
+    }
+    
+    result = login_use_case_fixture.authenticate_user("testuser", "wrongpass")
+    
+    assert result is False  # Debería retornar False
+
+
+
