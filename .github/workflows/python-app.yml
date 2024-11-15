@@ -35,7 +35,7 @@ jobs:
         MONGO_COLLECTION_DOCUMENTS: ${{ secrets.MONGO_COLLECTION_DOCUMENTS }}
         MONGO_COLLECTION_USERS: ${{ secrets.MONGO_COLLECTION_USERS }}
         MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
         NUMBER_OF_VECTORIAL_RESULTS: ${{ secrets.NUMBER_OF_VECTORIAL_RESULTS }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         REACT_VITE_CONNECTION: ${{ secrets.REACT_VITE_CONNECTION }}
