@@ -285,3 +285,58 @@ def test_register_fail_username_exists(register_fixture, mock_repo_register) -> 
 
 
 client = TestClient(app)
+
+
+def test_register_user_success():
+    response = client.post(
+        "/register",
+        json={
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "strongpassword123",
+        },
+    )
+    assert response.status_code == 200  # Asegúrate de que este sea el código esperado
+    assert "error" not in response.json()
+
+
+def test_login_user():
+    response = client.post(
+        "/login", json={"username": "testuser", "password": "securepassword"}
+    )
+    assert response.status_code == 200
+    assert (
+        "access_token" in response.json()
+    ), f"Response does not contain 'access_token': {response.json()}"
+
+
+def test_get_users():
+    response = client.get("/users")
+    assert response.status_code in (
+        200,
+        404,
+    )  # Considerando que podría no haber usuarios
+    if response.status_code == 200:
+        assert isinstance(response.json(), list)
+
+
+def test_update_user():
+    response = client.put(
+        "/users/1",
+        json={
+            "username": "updateduser",
+            "email": "updated@example.com",
+            "role": "admin",
+            "password": "newpassword",
+        },
+    )
+    assert response.status_code in (
+        200,
+        404,
+        422,
+    ), f"Unexpected status code: {response.status_code}"
+
+
+def test_delete_user():
+    response = client.delete("/users/1")
+    assert response.status_code in (200, 404)
