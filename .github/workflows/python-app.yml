@@ -27,7 +27,7 @@ jobs:
       run: |
         poetry run pytest --cov=server --cov-report=xml
       env:
-        PYTHONPATH: ${{ github.workspace }}
+        PYTHONPATH: ${{ github.workspace }}/app
         ALGORITHM: ${{ secrets.ALGORITHM }}
         APP_HOST: ${{ secrets.APP_HOST }}
         APP_PORT: ${{ secrets.APP_PORT }}
