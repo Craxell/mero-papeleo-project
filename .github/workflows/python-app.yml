@@ -20,12 +20,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install poetry
+        pip install poetry==1.8.3
         poetry install
 
     - name: Run tests
       run: |
-        poetry run pytest --cov=app --cov-report=xml
+        poetry run pytest --cov=server --cov-report=xml
+      env:
+        ALGORITHM: ${{ secrets.ALGORITHM }}
+        APP_HOST: ${{ secrets.APP_HOST }}
+        APP_PORT: ${{ secrets.APP_PORT }}
+        MAX_TOKENS: ${{ secrets.MAX_TOKENS }}
+        MODEL: ${{ secrets.MODEL }}
+        MONGO_COLLECTION_DOCUMENTS: ${{ secrets.MONGO_COLLECTION_DOCUMENTS }}
+        MONGO_COLLECTION_USERS: ${{ secrets.MONGO_COLLECTION_USERS }}
+        MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        NUMBER_OF_VECTORIAL_RESULTS: ${{ secrets.NUMBER_OF_VECTORIAL_RESULTS }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        REACT_VITE_CONNECTION: ${{ secrets.REACT_VITE_CONNECTION }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        TEMPERATURE: ${{ secrets.TEMPERATURE }}
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -34,18 +49,3 @@ jobs:
           verbose: true
       env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          APP_HOST: ${{ secrets.APP_HOST }}
-          APP_PORT: ${{ secrets.APP_PORT }}
-          REACT_VITE_CONNECTION: ${{ secrets.REACT_VITE_CONNECTION }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ALGORITHM: ${{ secrets.ALGORITHM }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
-          MONGO_COLLECTION_USERS: ${{ secrets.MONGO_COLLECTION_USERS }}
-          MONGO_COLLECTION_DOCUMENTS: ${{ secrets.MONGO_COLLECTION_DOCUMENTS }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          MODEL: ${{ secrets.MODEL }}
-          MAX_TOKENS: ${{ secrets.MAX_TOKENS }}
-          TEMPERATURE: ${{ secrets.TEMPERATURE }}
-          NUMBER_OF_VECTORIAL_RESULTS: ${{ secrets.NUMBER_OF_VECTORIAL_RESULTS }}
-          
