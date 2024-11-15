@@ -48,6 +48,4 @@ jobs:
           MAX_TOKENS: ${{ secrets.MAX_TOKENS }}
           TEMPERATURE: ${{ secrets.TEMPERATURE }}
           NUMBER_OF_VECTORIAL_RESULTS: ${{ secrets.NUMBER_OF_VECTORIAL_RESULTS }}
-          run: |
-            export PYTHONPATH=$PYTHONPATH:$(pwd)
-            pytest --cov
+          
