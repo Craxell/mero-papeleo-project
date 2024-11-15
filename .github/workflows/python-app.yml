@@ -56,3 +56,18 @@ jobs:
         verbose: true
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        APP_HOST: "localhost"
+        APP_PORT: "8080"
+        REACT_VITE_CONNECTION: "http://localhost:5173"
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ALGORITHM: "HS256"
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        MONGO_DB_NAME: "dbMeroPapeleo"
+        MONGO_COLLECTION_USERS: "users"
+        MONGO_COLLECTION_DOCUMENTS: "user_docs"
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        MODEL: "gpt-3.5-turbo"
+        MAX_TOKENS: "100"
+        TEMPERATURE: "0.5"
+        NUMBER_OF_VECTORIAL_RESULTS: "5"
+        
