@@ -1,6 +1,8 @@
 import sys
 import os
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
@@ -9,7 +11,6 @@ from configurations import settings
 from api.routers import router
 
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 app = FastAPI()
 
 # Configuración CORS

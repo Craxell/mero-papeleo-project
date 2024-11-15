@@ -11,11 +11,6 @@ from fastapi.testclient import TestClient
 from app.main import app
 
 
-# Configuración global
-SECRET_KEY = Settings.SECRET_KEY
-ALGORITHM = Settings.ALGORITHM
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
