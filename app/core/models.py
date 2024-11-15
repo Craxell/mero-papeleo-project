@@ -6,6 +6,7 @@ import uuid
 def generate_uuid() -> str:
     return str(uuid.uuid4())
 
+
 class Document(pydantic.BaseModel):
     id: str = pydantic.Field(default_factory=generate_uuid)
     title: Optional[str] = None
@@ -13,7 +14,7 @@ class Document(pydantic.BaseModel):
     content: Optional[str] = None
 
 
-#Backend_MongoDB_Users
+# Backend_MongoDB_Users
 class Token(pydantic.BaseModel):
     access_token: str
     token_type: str = "bearer"
@@ -24,6 +25,7 @@ class UpdateUserRequest(pydantic.BaseModel):
     email: str
     role: str
     password: str = None
+
 
 class UserCreate(pydantic.BaseModel):
     username: str

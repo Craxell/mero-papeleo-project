@@ -3,29 +3,37 @@ from app.core import ports
 from app.core.models import Document
 import pymongo as pyM
 
+
 class MongoDBAdapter(ports.MongoDBRepositoryPort):
-    def __init__(self, uri: str, database: str, users_collection: str, documents_collection: str) -> None:
+    def __init__(
+        self, uri: str, database: str, users_collection: str, documents_collection: str
+    ) -> None:
         self.client = pyM.MongoClient(uri)
         self.db = self.client[database]
         self.users = self.db[users_collection]
         self.documents = self.db[documents_collection]
 
-
     # Document methods --------------------------------
     def save_document(self, document: Document) -> None:
         self.documents.insert_one(
-            {"id": document.id, "title": document.title, "path": document.path, "content": document.content})
+            {
+                "id": document.id,
+                "title": document.title,
+                "path": document.path,
+                "content": document.content,
+            }
+        )
 
     def get_document(self, id: str) -> Document | None:
         document = self.documents.find_one({"id": id})
         if document:
-            return Document(id=document["id"], title=document["title"],
-                                   path=document["path"], content=document["content"])
+            return Document(
+                id=document["id"],
+                title=document["title"],
+                path=document["path"],
+                content=document["content"],
+            )
         return None
-
-
-
-
 
     def get_database(self):
         """Devuelve la base de datos MongoDB."""
@@ -34,17 +42,19 @@ class MongoDBAdapter(ports.MongoDBRepositoryPort):
     def get_next_sequence(self, sequence_name: str) -> int:
         """Obtiene el siguiente número de secuencia (autoincremento)."""
         sequence_doc = self.db["counters"].find_one_and_update(
-            {"_id": sequence_name}, 
-            {"$inc": {"seq": 1}}, 
+            {"_id": sequence_name},
+            {"$inc": {"seq": 1}},
             return_document=pyM.ReturnDocument.AFTER,
-            upsert=True
+            upsert=True,
         )
         return sequence_doc["seq"]
 
     def insert_one(self, collection_name: str, document: dict):
         """Inserta un documento en la colección."""
-        if 'id' not in document:
-            document['id'] = self.get_next_sequence(collection_name)  # Genera un nuevo id
+        if "id" not in document:
+            document["id"] = self.get_next_sequence(
+                collection_name
+            )  # Genera un nuevo id
         return self.db[collection_name].insert_one(document)
 
     def find_one(self, collection_name: str, query: dict) -> dict:

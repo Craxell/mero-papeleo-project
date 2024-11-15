@@ -8,4 +8,4 @@ hash2 = pwd_context.hash("Carlos1234")
 
 
 print(hash1)
-print(hash2) 
+print(hash2)

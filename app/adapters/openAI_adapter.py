@@ -1,6 +1,7 @@
 import openai
 from core import ports
 
+
 class OpenAIAdapter(ports.LlmPort):
     def __init__(self, api_key: str, model: str, max_tokens: int, temperature: float):
         self._openai_client = openai.OpenAI(api_key=api_key)
@@ -13,8 +14,10 @@ class OpenAIAdapter(ports.LlmPort):
         response = self._openai_client.chat.completions.create(
             model=self._model,
             messages=[
-                {"role": "system",
-                 "content": f"The context is: {retrieval_context}, please respond to the following question: "},
+                {
+                    "role": "system",
+                    "content": f"The context is: {retrieval_context}, please respond to the following question: ",
+                },
                 {"role": "user", "content": prompt},
             ],
             max_tokens=self._max_tokens,

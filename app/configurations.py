@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from pathlib import Path
 
+
 class Settings(BaseSettings):
     # Configuración de la aplicación
     APP_HOST: str
@@ -8,8 +9,8 @@ class Settings(BaseSettings):
 
     # Config react_vite
     REACT_VITE_CONNECTION: str
-    
-    #Hashing
+
+    # Hashing
     SECRET_KEY: str
     ALGORITHM: str
 
@@ -18,7 +19,7 @@ class Settings(BaseSettings):
     MONGO_DB_NAME: str
     MONGO_COLLECTION_USERS: str
     MONGO_COLLECTION_DOCUMENTS: str
-    
+
     # Configuración para OpenAI
     OPENAI_API_KEY: str
     MODEL: str
@@ -31,5 +32,6 @@ class Settings(BaseSettings):
         project_root = Path(__file__).resolve().parents[1]
         env_file = project_root / ".env"
         # Busca el archivo .env en la raíz del proyecto
+
 
 settings = Settings()

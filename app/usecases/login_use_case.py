@@ -1,6 +1,7 @@
 from fastapi import HTTPException, status
+
 # from core.models import Token
-from jose import JWTError, jwt
+from jose import jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from app.configurations import settings
@@ -17,6 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 class LoginUseCase:
     def __init__(self, repo: MongoDBAdapter):
         self.repo = repo
@@ -25,16 +27,20 @@ class LoginUseCase:
         if not username or not password:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El nombre de usuario y la contraseña son requeridos."
+                detail="El nombre de usuario y la contraseña son requeridos.",
             )
 
     def authenticate_user(self, username: str, password: str):
         user = self.repo.find_one("users", {"username": username})
         if not user:
-            logger.warning(f"Intento de inicio de sesión fallido: usuario {username} no encontrado.")
+            logger.warning(
+                f"Intento de inicio de sesión fallido: usuario {username} no encontrado."
+            )
             return False
         if not pwd_context.verify(password, user["password"]):
-            logger.warning(f"Intento de inicio de sesión fallido: contraseña incorrecta para el usuario {username}.")
+            logger.warning(
+                f"Intento de inicio de sesión fallido: contraseña incorrecta para el usuario {username}."
+            )
             return False
         return user
 
@@ -48,7 +54,7 @@ class LoginUseCase:
     def login(self, username: str, password: str):
         # Validar credenciales
         self.validate_credentials(username, password)
-        
+
         # Autenticación de usuario
         user = self.authenticate_user(username, password)
         if not user:
@@ -57,16 +63,18 @@ class LoginUseCase:
             #     message="Credenciales inválidas",
             #     headers={"WWW-Authenticate": "Bearer"},
             # )
-            return{
+            return {
                 "status": "error",
                 "message": "Credenciales inválidas",
-                "headers": {"WWW-Authenticate": "Bearer"}
+                "headers": {"WWW-Authenticate": "Bearer"},
             }
-        
+
         role = user.get("role", "user")
         email = user.get("email", "user")
         id = user.get("id", "user")
-        access_token = self.create_access_token(data={"sub": user["username"], "username": user["username"], "role": role})
+        access_token = self.create_access_token(
+            data={"sub": user["username"], "username": user["username"], "role": role}
+        )
         logger.info(f"Inicio de sesión exitoso para el usuario: {username}")
         return {
             "status": "success",
@@ -76,5 +84,5 @@ class LoginUseCase:
             "access_token": access_token,
             "role": role,
             "id": id,
-            "token_type": "bearer"
+            "token_type": "bearer",
         }

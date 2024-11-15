@@ -6,6 +6,7 @@ import PyPDF2
 import docx
 from typing import Optional
 
+
 class FileManager(abc.ABC):
     @abstractmethod
     def __init__(self, path):
@@ -22,9 +23,9 @@ class PDFFileManager(FileManager):
 
     def read(self) -> Optional[str]:
         try:
-            with open(self.path, 'rb') as file:
+            with open(self.path, "rb") as file:
                 reader = PyPDF2.PdfReader(file)
-                text = ''
+                text = ""
                 for page in range(len(reader.pages)):
                     text += reader.pages[page].extract_text()
 
@@ -37,9 +38,13 @@ class PDFFileManager(FileManager):
             return f"An error occurred while reading the PDF: {e}"
 
     def clean_text(self, text: str) -> str:
-        text = re.sub(r'(?<!\n)\n(?!\n)', ' ', text) # Reemplaza saltos de línea simples por un espacio.
-        text = re.sub(r'\n+', '\n', text) # Reemplaza múltiples saltos de línea consecutivos por uno solo.
-        text = re.sub(r'[ \t]+', ' ', text)  # Quita múltiples espacios y tabulaciones.
+        text = re.sub(
+            r"(?<!\n)\n(?!\n)", " ", text
+        )  # Reemplaza saltos de línea simples por un espacio.
+        text = re.sub(
+            r"\n+", "\n", text
+        )  # Reemplaza múltiples saltos de línea consecutivos por uno solo.
+        text = re.sub(r"[ \t]+", " ", text)  # Quita múltiples espacios y tabulaciones.
         return text
 
 
@@ -50,7 +55,7 @@ class WordFileManager(FileManager):
     def read(self) -> Optional[str]:
         try:
             doc = docx.Document(self.path)
-            text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
+            text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
             return text
         except FileNotFoundError:
             return f"File not found: {self.path}"
@@ -64,7 +69,7 @@ class TextFileManager(FileManager):
 
     def read(self):
         try:
-            with open(self.path, 'r', encoding='utf-8') as file:
+            with open(self.path, "r", encoding="utf-8") as file:
                 return file.read()
         except FileNotFoundError:
             return f"File not found: {self.path}"
@@ -75,17 +80,16 @@ class TextFileManager(FileManager):
 strategies: dict[str, Type[FileManager]] = {
     "pdf": PDFFileManager,
     "docx": WordFileManager,
-    "txt": TextFileManager
+    "txt": TextFileManager,
 }
+
 
 class FileReader:
     def __init__(self, path: str):
-        extension = path.split('.')[-1]
+        extension = path.split(".")[-1]
         if extension not in strategies:
             raise ValueError(f"Unsupported file type: {extension}")
         self.manager = strategies[extension](path)
 
     def read_file(self):
         return self.manager.read()
-
-
