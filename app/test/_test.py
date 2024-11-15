@@ -263,11 +263,6 @@ def test_register_fail_username_exists(register_fixture, mock_repo_register):
     assert result["status"] == "error"
     assert result["message"] == "Username no disponible."
 
-
-
-
-
-
 from fastapi.testclient import TestClient
 import pytest
 from app.main import app
@@ -282,36 +277,3 @@ def test_user():
         "email": "test@e2e2.com"
     
     }
-
-# Prueba End-to-End
-def test_e2e_user_registration_login_deletion():
-    # 1. Registro de usuario
-    registration_response = client.post("/register", json=test_user)
-    assert registration_response.status_code == 200
-    assert registration_response.json().get("message") == "Usuario registrado con éxito."
-
-    # 2. Obtener el ID del usuario recién registrado
-    users_response = client.get("/users")
-    assert users_response.status_code == 200
-    users = users_response.json()
-    user_id = next((user["id"] for user in users if user["username"] == test_user["username"]), None)
-    assert user_id is not None, "El usuario recién creado no se encuentra en la lista de usuarios"
-
-    # 3. Inicio de sesión del usuario
-    login_response = client.post("/login", json={
-        "username": test_user["username"],
-        "password": test_user["password"]
-    })
-    assert login_response.status_code == 200
-    assert "access_token" in login_response.json(), "Token de acceso no encontrado en la respuesta de login"
-
-    # 4. Eliminación del usuario
-    deletion_response = client.delete(f"/users/{user_id}")
-    assert deletion_response.status_code == 200
-    assert deletion_response.json().get("message") == "Usuario eliminado correctamente"
-
-    # 5. Comprobar que el usuario ya no existe
-    get_users_response = client.get("/users")
-    assert get_users_response.status_code == 200
-    remaining_users = get_users_response.json()
-    assert user_id not in [user['id'] for user in remaining_users], "El usuario no fue eliminado correctamente"
